@@ -1,0 +1,9 @@
+<nav>
+  <div class="container">
+    <div class="brand"><img class="brand-logo" src="{{ "img/logo.svg" | relURL }}" alt="" width="28" height="28">{{ .Site.Params.brand }}</div>
+    <div>
+      {{ range .Site.Menus.main }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}
+      <a href="https://github.com/{{ .Site.Params.github }}">GitHub</a>
+    </div>
+  </div>
+</nav>

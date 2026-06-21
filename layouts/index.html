@@ -1,0 +1,53 @@
+{{ define "main" }}
+<section class="hero">
+  <img class="hero-logo" src="{{ "img/logo.svg" | relURL }}" alt="go-fft logo" width="96" height="96">
+  <h1>
+    <span class="accent">{{ .Site.Params.heroAccent }}</span>
+  </h1>
+  {{ with .Site.Params.heroTagline }}<p class="tag">{{ . }}</p>{{ end }}
+  <div class="intro">
+    {{ range .Site.Params.heroIntro }}<p>{{ . | safeHTML }}</p>{{ end }}
+  </div>
+</section>
+
+<section id="why">
+  <h2>Why go-fft</h2>
+  <p>
+    The fast Fourier transform is the workhorse of signal processing, and in most
+    languages it means binding the native <strong>FFTW3</strong> C library. go-fft
+    brings the <code>numpy.fft</code> / <code>scipy.fft</code> vocabulary to Go with
+    <strong>no cgo and no FFTW</strong>: a single portable module that cross-compiles to
+    a static binary on every target, accelerated by go-asmgen-generated SIMD where the
+    Go assembler allows it. It is the cgo-free FFT the Go and Ruby ecosystems lacked.
+  </p>
+</section>
+
+<section id="repos">
+  <h2>Repositories</h2>
+  <div class="grid">
+    <div class="card">
+      <h4><a href="https://github.com/go-fft/fft">fft</a></h4>
+      <p>The library. Complex &amp; real transforms (<code>FFT</code>/<code>IFFT</code>/<code>RFFT</code>/<code>IRFFT</code>), N-D and 2-D (<code>FFTN</code>/<code>FFT2</code>), frequency-bin helpers, windows, and spectral helpers (<code>PSD</code>/<code>Spectrogram</code>). SIMD complex-multiply on amd64 (SSE2), arm64 (NEON), riscv64 (RVV) and s390x (vector) &mdash; four of the six 64-bit targets; loong64/ppc64le run the validated scalar path.</p>
+    </div>
+    <div class="card">
+      <h4><a href="https://go-fft.github.io/docs/">docs</a></h4>
+      <p>Versioned documentation site (MkDocs Material): API reference, the phased roadmap, and honest benchmark pages versus pocketfft / FFTW. <a href="https://github.com/go-fft/docs">Source →</a></p>
+    </div>
+    <div class="card">
+      <h4><a href="https://github.com/go-fft/brand">brand</a></h4>
+      <p>Logos and icons for the organization, in SVG / PNG / JPG / ICO / ICNS across colour, white and black variants.</p>
+    </div>
+  </div>
+</section>
+
+<section id="quality">
+  <h2>Quality bar</h2>
+  <ul class="features">
+    <li><strong>Pure Go.</strong> <code>CGO_ENABLED=0</code> across the org. No cgo, no FFTW, no native shims.</li>
+    <li><strong>100% test coverage.</strong> Gated in CI, differentially checked against <code>numpy.fft</code>.</li>
+    <li><strong>numpy.fft semantics.</strong> The same normalization, bin layout and frequency conventions you already know.</li>
+    <li><strong>Multi-arch SIMD.</strong> go-asmgen complex-multiply kernels on four 64-bit targets, validated per-arch (riscv64 hardware-validated on RVV 1.0); a portable scalar core everywhere.</li>
+    <li><strong>BSD-3-Clause</strong> on every source file.</li>
+  </ul>
+</section>
+{{ end }}
