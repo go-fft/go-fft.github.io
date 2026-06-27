@@ -13,7 +13,7 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap']
   heroTagline = "The discrete Fourier transform in pure Go. numpy.fft semantics, no FFTW."
 
   heroIntro = [
-    "<strong>go-fft</strong> computes the discrete Fourier transform of complex and real signals of <strong>any length</strong> &mdash; radix-2 Cooley&ndash;Tukey for power-of-two sizes, Bluestein's chirp-z for the rest &mdash; in <strong>pure Go, with cgo disabled</strong>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).",
+    "<strong>go-fft</strong> computes the discrete Fourier transform of complex and real signals of <strong>any length</strong> &mdash; split-radix for power-of-two sizes, mixed-radix Cooley&ndash;Tukey for composites, Rader and Bluestein's chirp-z for primes &mdash; in <strong>pure Go, with cgo disabled</strong>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).",
     "Ruby has no cgo-free FFT (every option wraps FFTW3) and <code>gonum/dsp/fourier</code>'s optimized assembly is amd64-only. go-fft is a fully portable scalar core with go-asmgen SIMD kernels on four of Go's six 64-bit targets. 100% test coverage is the bar, differentially checked against numpy."
   ]
 
