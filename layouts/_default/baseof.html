@@ -9,6 +9,19 @@
   <link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <script>
+    // Apply any saved theme preference before first paint (no flash).
+    // No saved preference = "system", which the prefers-color-scheme
+    // media query in main.css already handles.
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "light" || saved === "dark") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   {{ partial "nav.html" . }}
@@ -18,5 +31,33 @@
   </main>
 
   {{ partial "footer.html" . }}
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var btn = document.getElementById("theme-toggle");
+      if (!btn) return;
+      // Cycle: system -> light -> dark -> system ...
+      var order = ["system", "light", "dark"];
+      function current() {
+        var t = root.getAttribute("data-theme");
+        return t === "light" || t === "dark" ? t : "system";
+      }
+      function apply(mode) {
+        if (mode === "system") {
+          root.removeAttribute("data-theme");
+          try { localStorage.removeItem("theme"); } catch (e) {}
+        } else {
+          root.setAttribute("data-theme", mode);
+          try { localStorage.setItem("theme", mode); } catch (e) {}
+        }
+        btn.setAttribute("data-mode", mode);
+      }
+      apply(current());
+      btn.addEventListener("click", function () {
+        var next = order[(order.indexOf(current()) + 1) % order.length];
+        apply(next);
+      });
+    })();
+  </script>
 </body>
 </html>

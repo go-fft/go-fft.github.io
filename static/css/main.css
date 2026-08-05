@@ -60,6 +60,65 @@
     --hero-gradient-2:  rgba(219, 39, 119, 0.30);
   }
 }
+/* Explicit overrides for the manual toggle (button below), independent of
+   the OS-level prefers-color-scheme media query above. No [data-theme]
+   attribute = "system", which the media query already handles. */
+:root[data-theme="dark"] {
+  --fg:        #fbe6f0;
+  --bg:        #1a0510;
+  --bg-2:      #2a0a1c;
+  --muted:     #e0a3c4;
+  --accent:    #f472b6;
+  --accent-2:  #f9a8d4;
+  --accent-3:  #fbcfe8;
+  --code-bg:   #3b0f26;
+  --border:    #4a1530;
+  --thread:    #f472b6;
+  --mesh-edge:        rgba(249, 168, 212, 0.32);
+  --mesh-edge-hi:     rgba(253, 230, 138, 0.85);
+  --mesh-arch-fill:   #f9a8d4;
+  --mesh-arch-halo:   rgba(249, 168, 212, 0.30);
+  --mesh-distro-fill: #f472b6;
+  --mesh-distro-halo: rgba(251, 191, 36, 0.22);
+  --mesh-hub-fill:    #fbcfe8;
+  --mesh-hub-halo:    rgba(253, 230, 138, 0.36);
+  --mesh-label-fg:    #fbcfe8;
+  --mesh-container-dc-fill:     rgba(249, 168, 212, 0.08);
+  --mesh-container-dc-stroke:   rgba(249, 168, 212, 0.65);
+  --mesh-container-rack-fill:   rgba(249, 168, 212, 0.15);
+  --mesh-container-rack-stroke: rgba(249, 168, 212, 0.55);
+  --mesh-container-label-fg:    rgba(254, 243, 199, 0.95);
+  --hero-gradient-1:  rgba(249, 168, 212, 0.22);
+  --hero-gradient-2:  rgba(219, 39, 119, 0.30);
+}
+:root[data-theme="light"] {
+  --fg:        #2a0a1c;
+  --bg:        #fdf2f8;
+  --bg-2:      #fce7f3;
+  --muted:     #9d2463;
+  --accent:    #db2777;
+  --accent-2:  #ec4899;
+  --accent-3:  #f9a8d4;
+  --code-bg:   #fce7f3;
+  --border:    #f7cce0;
+  --thread:    #db2777;
+  --mesh-edge:        rgba(219, 39, 119, 0.32);
+  --mesh-edge-hi:     rgba(219, 39, 119, 0.85);
+  --mesh-arch-fill:   #db2777;
+  --mesh-arch-halo:   rgba(219, 39, 119, 0.30);
+  --mesh-distro-fill: #ec4899;
+  --mesh-distro-halo: rgba(245, 158, 11, 0.22);
+  --mesh-hub-fill:    #b45309;
+  --mesh-hub-halo:    rgba(180, 83, 9, 0.36);
+  --mesh-label-fg:    #78350f;
+  --mesh-container-dc-fill:     rgba(219, 39, 119, 0.06);
+  --mesh-container-dc-stroke:   rgba(219, 39, 119, 0.55);
+  --mesh-container-rack-fill:   rgba(219, 39, 119, 0.14);
+  --mesh-container-rack-stroke: rgba(219, 39, 119, 0.45);
+  --mesh-container-label-fg:    rgba(120, 53, 15, 0.85);
+  --hero-gradient-1:  rgba(249, 168, 212, 0.30);
+  --hero-gradient-2:  rgba(219, 39, 119, 0.18);
+}
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -82,6 +141,27 @@ nav .brand { font-weight: 600; letter-spacing: -0.01em; color: var(--accent); di
 nav .brand-logo { width: 28px; height: 28px; border-radius: 7px; vertical-align: middle; }
 nav a { color: var(--muted); text-decoration: none; margin-left: 1.25rem; }
 nav a:hover { color: var(--fg); }
+
+.theme-toggle {
+  margin-left: 1.25rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-2);
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  transition: border-color 0.18s, color 0.18s;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle-icon::before { content: "\1F310"; font-size: 0.95rem; } /* system: globe */
+.theme-toggle[data-mode="light"] .theme-toggle-icon::before { content: "\2600\FE0F"; } /* sun */
+.theme-toggle[data-mode="dark"] .theme-toggle-icon::before { content: "\1F319"; } /* moon */
 
 /* ---------- HERO ---------- */
 .hero {
