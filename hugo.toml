@@ -6,7 +6,7 @@ title   = 'go-fft'
 disableKinds = ['taxonomy', 'term', 'rss', 'sitemap']
 
 [params]
-  description = "go-fft is a pure-Go (CGO=0) FFT library — the numpy.fft / scipy.fft equivalent for Go, with no dependency on the native FFTW3 C library. SIMD kernels across the six 64-bit Go targets."
+  description = "go-fft is a pure-Go (CGO=0) FFT library — the numpy.fft / scipy.fft equivalent for Go, with no dependency on the native FFTW3 C library. SIMD kernels on four of the six 64-bit Go targets, plus AVX2 butterfly kernels on amd64."
   brand       = "go-fft"
   github      = "go-fft"
   heroAccent  = "go-fft"
@@ -14,7 +14,7 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap']
 
   heroIntro = [
     "<strong>go-fft</strong> computes the discrete Fourier transform of complex and real signals of <strong>any length</strong> &mdash; split-radix for power-of-two sizes, mixed-radix Cooley&ndash;Tukey for composites, Rader and Bluestein's chirp-z for primes &mdash; in <strong>pure Go, with cgo disabled</strong>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).",
-    "Ruby has no cgo-free FFT (every option wraps FFTW3) and <code>gonum/dsp/fourier</code>'s optimized assembly is amd64-only. go-fft is a fully portable scalar core with go-asmgen SIMD kernels on four of Go's six 64-bit targets. 100% test coverage is the bar, differentially checked against numpy."
+    "Ruby has no cgo-free FFT (every option wraps FFTW3) and <code>gonum/dsp/fourier</code>'s optimized assembly is amd64-only. go-fft is a fully portable scalar core with go-asmgen SIMD kernels on four of Go's six 64-bit targets, and AVX2 butterfly kernels on amd64 that are 19&ndash;35% faster than the SSE2 baseline and bit-identical to it. 100% test coverage is the bar, differentially checked against numpy."
   ]
 
 [menu]

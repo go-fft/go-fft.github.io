@@ -27,11 +27,11 @@
   <div class="grid">
     <div class="card">
       <h4><a href="https://github.com/go-fft/fft">fft</a></h4>
-      <p>The library. Complex &amp; real transforms (<code>FFT</code>/<code>IFFT</code>/<code>RFFT</code>/<code>IRFFT</code>), N-D and 2-D (<code>FFTN</code>/<code>FFT2</code>), frequency-bin helpers, windows, and spectral helpers (<code>PSD</code>/<code>Spectrogram</code>). SIMD complex-multiply on amd64 (SSE2), arm64 (NEON), riscv64 (RVV) and s390x (vector) &mdash; four of the six 64-bit targets; loong64/ppc64le run the validated scalar path.</p>
+      <p>The library. Complex &amp; real transforms (<code>FFT</code>/<code>IFFT</code>/<code>RFFT</code>/<code>IRFFT</code>), N-D and 2-D (<code>FFTN</code>/<code>FFT2</code>), frequency-bin helpers, windows, and spectral helpers (<code>PSD</code>/<code>Spectrogram</code>). Two kinds of SIMD kernel: a bit-identical complex multiply on amd64 (SSE2), arm64 (NEON), riscv64 (RVV) and s390x (vector) &mdash; four of the six 64-bit targets, with loong64/ppc64le on the validated scalar path &mdash; and <strong>AVX2 butterfly stage kernels</strong> on amd64, chosen at run time, 19&ndash;35% faster than SSE2 and bit-identical to it.</p>
     </div>
     <div class="card">
       <h4><a href="https://go-fft.github.io/docs/">docs</a></h4>
-      <p>Versioned documentation site (MkDocs Material): API reference, the phased roadmap, and honest benchmark pages versus pocketfft / FFTW. <a href="https://github.com/go-fft/docs">Source →</a></p>
+      <p>The documentation site (Hugo + hugo-theme-relearn): API reference, the phased roadmap, and honest benchmark pages versus pocketfft / FFTW. <a href="https://github.com/go-fft/docs">Source →</a></p>
     </div>
     <div class="card">
       <h4><a href="https://github.com/go-fft/brand">brand</a></h4>
@@ -46,7 +46,7 @@
     <li><strong>Pure Go.</strong> <code>CGO_ENABLED=0</code> across the org. No cgo, no FFTW, no native shims.</li>
     <li><strong>100% test coverage.</strong> Gated in CI, differentially checked against <code>numpy.fft</code>.</li>
     <li><strong>numpy.fft semantics.</strong> The same normalization, bin layout and frequency conventions you already know.</li>
-    <li><strong>Multi-arch SIMD.</strong> go-asmgen complex-multiply kernels on four 64-bit targets, validated per-arch (riscv64 hardware-validated on RVV 1.0); a portable scalar core everywhere.</li>
+    <li><strong>Multi-arch SIMD.</strong> go-asmgen complex-multiply kernels on four 64-bit targets, validated per-arch (riscv64 hardware-validated on RVV 1.0), and AVX2 butterfly kernels on amd64 &mdash; every one of them asserted <em>bit-identical</em> to the scalar path, because a faster transform that answers differently is not the same transform. A portable scalar core everywhere.</li>
     <li><strong>BSD-3-Clause</strong> on every source file.</li>
   </ul>
 </section>
