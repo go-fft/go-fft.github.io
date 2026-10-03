@@ -1,123 +1,123 @@
-/* go-fft landing — magenta palette, sibling of the go-* family pages.
-   Same token shape as the other org landings ; only the hex values change
-   so the pages read as one family. Accent : magenta
-   (#db2777 pink-600 family). */
+/* go-fft landing — emerald palette, shared with go-ndarray: the two are one
+   scientific-computing family (one colour per family, told apart by their
+   glyphs). Same token shape as the other org landings; the values are
+   go-ndarray's, token for token. Accent: emerald (#059669 green-600). */
 :root {
-  --fg:        #2a0a1c;
-  --bg:        #fdf2f8;
-  --bg-2:      #fce7f3;
-  --muted:     #9d2463;
-  --accent:    #db2777;
-  --accent-2:  #ec4899;
-  --accent-3:  #f9a8d4;
-  --code-bg:   #fce7f3;
-  --border:    #f7cce0;
-  --thread:    #db2777;
-  --mesh-edge:        rgba(219, 39, 119, 0.32);
-  --mesh-edge-hi:     rgba(219, 39, 119, 0.85);
-  --mesh-arch-fill:   #db2777;
-  --mesh-arch-halo:   rgba(219, 39, 119, 0.30);
-  --mesh-distro-fill: #ec4899;
+  --fg:        #052e22;
+  --bg:        #f0fdf9;
+  --bg-2:      #d1fae5;
+  --muted:     #047857;
+  --accent:    #059669;
+  --accent-2:  #10b981;
+  --accent-3:  #6ee7b7;
+  --code-bg:   #d1fae5;
+  --border:    #a7f3d0;
+  --thread:    #059669;
+  --mesh-edge:        rgba(5, 150, 105, 0.32);
+  --mesh-edge-hi:     rgba(5, 150, 105, 0.85);
+  --mesh-arch-fill:   #059669;
+  --mesh-arch-halo:   rgba(5, 150, 105, 0.30);
+  --mesh-distro-fill: #10b981;
   --mesh-distro-halo: rgba(245, 158, 11, 0.22);
   --mesh-hub-fill:    #b45309;
   --mesh-hub-halo:    rgba(180, 83, 9, 0.36);
   --mesh-label-fg:    #78350f;
-  --mesh-container-dc-fill:     rgba(219, 39, 119, 0.06);
-  --mesh-container-dc-stroke:   rgba(219, 39, 119, 0.55);
-  --mesh-container-rack-fill:   rgba(219, 39, 119, 0.14);
-  --mesh-container-rack-stroke: rgba(219, 39, 119, 0.45);
+  --mesh-container-dc-fill:     rgba(5, 150, 105, 0.06);
+  --mesh-container-dc-stroke:   rgba(5, 150, 105, 0.55);
+  --mesh-container-rack-fill:   rgba(5, 150, 105, 0.14);
+  --mesh-container-rack-stroke: rgba(5, 150, 105, 0.45);
   --mesh-container-label-fg:    rgba(120, 53, 15, 0.85);
-  --hero-gradient-1:  rgba(249, 168, 212, 0.30);
-  --hero-gradient-2:  rgba(219, 39, 119, 0.18);
+  --hero-gradient-1:  rgba(110, 231, 183, 0.30);
+  --hero-gradient-2:  rgba(5, 150, 105, 0.18);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --fg:        #fbe6f0;
-    --bg:        #1a0510;
-    --bg-2:      #2a0a1c;
-    --muted:     #e0a3c4;
-    --accent:    #f472b6;
-    --accent-2:  #f9a8d4;
-    --accent-3:  #fbcfe8;
-    --code-bg:   #3b0f26;
-    --border:    #4a1530;
-    --thread:    #f472b6;
-    --mesh-edge:        rgba(249, 168, 212, 0.32);
+    --fg:        #d1fae5;
+    --bg:        #04130d;
+    --bg-2:      #052e22;
+    --muted:     #6ee7b7;
+    --accent:    #34d399;
+    --accent-2:  #6ee7b7;
+    --accent-3:  #a7f3d0;
+    --code-bg:   #06291c;
+    --border:    #0a3d2a;
+    --thread:    #34d399;
+    --mesh-edge:        rgba(110, 231, 183, 0.32);
     --mesh-edge-hi:     rgba(253, 230, 138, 0.85);
-    --mesh-arch-fill:   #f9a8d4;
-    --mesh-arch-halo:   rgba(249, 168, 212, 0.30);
-    --mesh-distro-fill: #f472b6;
+    --mesh-arch-fill:   #6ee7b7;
+    --mesh-arch-halo:   rgba(110, 231, 183, 0.30);
+    --mesh-distro-fill: #34d399;
     --mesh-distro-halo: rgba(251, 191, 36, 0.22);
-    --mesh-hub-fill:    #fbcfe8;
+    --mesh-hub-fill:    #a7f3d0;
     --mesh-hub-halo:    rgba(253, 230, 138, 0.36);
-    --mesh-label-fg:    #fbcfe8;
-    --mesh-container-dc-fill:     rgba(249, 168, 212, 0.08);
-    --mesh-container-dc-stroke:   rgba(249, 168, 212, 0.65);
-    --mesh-container-rack-fill:   rgba(249, 168, 212, 0.15);
-    --mesh-container-rack-stroke: rgba(249, 168, 212, 0.55);
+    --mesh-label-fg:    #a7f3d0;
+    --mesh-container-dc-fill:     rgba(110, 231, 183, 0.08);
+    --mesh-container-dc-stroke:   rgba(110, 231, 183, 0.65);
+    --mesh-container-rack-fill:   rgba(110, 231, 183, 0.15);
+    --mesh-container-rack-stroke: rgba(110, 231, 183, 0.55);
     --mesh-container-label-fg:    rgba(254, 243, 199, 0.95);
-    --hero-gradient-1:  rgba(249, 168, 212, 0.22);
-    --hero-gradient-2:  rgba(219, 39, 119, 0.30);
+    --hero-gradient-1:  rgba(110, 231, 183, 0.22);
+    --hero-gradient-2:  rgba(5, 150, 105, 0.30);
   }
 }
 /* Explicit overrides for the manual toggle (button below), independent of
    the OS-level prefers-color-scheme media query above. No [data-theme]
    attribute = "system", which the media query already handles. */
 :root[data-theme="dark"] {
-  --fg:        #fbe6f0;
-  --bg:        #1a0510;
-  --bg-2:      #2a0a1c;
-  --muted:     #e0a3c4;
-  --accent:    #f472b6;
-  --accent-2:  #f9a8d4;
-  --accent-3:  #fbcfe8;
-  --code-bg:   #3b0f26;
-  --border:    #4a1530;
-  --thread:    #f472b6;
-  --mesh-edge:        rgba(249, 168, 212, 0.32);
+  --fg:        #d1fae5;
+  --bg:        #04130d;
+  --bg-2:      #052e22;
+  --muted:     #6ee7b7;
+  --accent:    #34d399;
+  --accent-2:  #6ee7b7;
+  --accent-3:  #a7f3d0;
+  --code-bg:   #06291c;
+  --border:    #0a3d2a;
+  --thread:    #34d399;
+  --mesh-edge:        rgba(110, 231, 183, 0.32);
   --mesh-edge-hi:     rgba(253, 230, 138, 0.85);
-  --mesh-arch-fill:   #f9a8d4;
-  --mesh-arch-halo:   rgba(249, 168, 212, 0.30);
-  --mesh-distro-fill: #f472b6;
+  --mesh-arch-fill:   #6ee7b7;
+  --mesh-arch-halo:   rgba(110, 231, 183, 0.30);
+  --mesh-distro-fill: #34d399;
   --mesh-distro-halo: rgba(251, 191, 36, 0.22);
-  --mesh-hub-fill:    #fbcfe8;
+  --mesh-hub-fill:    #a7f3d0;
   --mesh-hub-halo:    rgba(253, 230, 138, 0.36);
-  --mesh-label-fg:    #fbcfe8;
-  --mesh-container-dc-fill:     rgba(249, 168, 212, 0.08);
-  --mesh-container-dc-stroke:   rgba(249, 168, 212, 0.65);
-  --mesh-container-rack-fill:   rgba(249, 168, 212, 0.15);
-  --mesh-container-rack-stroke: rgba(249, 168, 212, 0.55);
+  --mesh-label-fg:    #a7f3d0;
+  --mesh-container-dc-fill:     rgba(110, 231, 183, 0.08);
+  --mesh-container-dc-stroke:   rgba(110, 231, 183, 0.65);
+  --mesh-container-rack-fill:   rgba(110, 231, 183, 0.15);
+  --mesh-container-rack-stroke: rgba(110, 231, 183, 0.55);
   --mesh-container-label-fg:    rgba(254, 243, 199, 0.95);
-  --hero-gradient-1:  rgba(249, 168, 212, 0.22);
-  --hero-gradient-2:  rgba(219, 39, 119, 0.30);
+  --hero-gradient-1:  rgba(110, 231, 183, 0.22);
+  --hero-gradient-2:  rgba(5, 150, 105, 0.30);
 }
 :root[data-theme="light"] {
-  --fg:        #2a0a1c;
-  --bg:        #fdf2f8;
-  --bg-2:      #fce7f3;
-  --muted:     #9d2463;
-  --accent:    #db2777;
-  --accent-2:  #ec4899;
-  --accent-3:  #f9a8d4;
-  --code-bg:   #fce7f3;
-  --border:    #f7cce0;
-  --thread:    #db2777;
-  --mesh-edge:        rgba(219, 39, 119, 0.32);
-  --mesh-edge-hi:     rgba(219, 39, 119, 0.85);
-  --mesh-arch-fill:   #db2777;
-  --mesh-arch-halo:   rgba(219, 39, 119, 0.30);
-  --mesh-distro-fill: #ec4899;
+  --fg:        #052e22;
+  --bg:        #f0fdf9;
+  --bg-2:      #d1fae5;
+  --muted:     #047857;
+  --accent:    #059669;
+  --accent-2:  #10b981;
+  --accent-3:  #6ee7b7;
+  --code-bg:   #d1fae5;
+  --border:    #a7f3d0;
+  --thread:    #059669;
+  --mesh-edge:        rgba(5, 150, 105, 0.32);
+  --mesh-edge-hi:     rgba(5, 150, 105, 0.85);
+  --mesh-arch-fill:   #059669;
+  --mesh-arch-halo:   rgba(5, 150, 105, 0.30);
+  --mesh-distro-fill: #10b981;
   --mesh-distro-halo: rgba(245, 158, 11, 0.22);
   --mesh-hub-fill:    #b45309;
   --mesh-hub-halo:    rgba(180, 83, 9, 0.36);
   --mesh-label-fg:    #78350f;
-  --mesh-container-dc-fill:     rgba(219, 39, 119, 0.06);
-  --mesh-container-dc-stroke:   rgba(219, 39, 119, 0.55);
-  --mesh-container-rack-fill:   rgba(219, 39, 119, 0.14);
-  --mesh-container-rack-stroke: rgba(219, 39, 119, 0.45);
+  --mesh-container-dc-fill:     rgba(5, 150, 105, 0.06);
+  --mesh-container-dc-stroke:   rgba(5, 150, 105, 0.55);
+  --mesh-container-rack-fill:   rgba(5, 150, 105, 0.14);
+  --mesh-container-rack-stroke: rgba(5, 150, 105, 0.45);
   --mesh-container-label-fg:    rgba(120, 53, 15, 0.85);
-  --hero-gradient-1:  rgba(249, 168, 212, 0.30);
-  --hero-gradient-2:  rgba(219, 39, 119, 0.18);
+  --hero-gradient-1:  rgba(110, 231, 183, 0.30);
+  --hero-gradient-2:  rgba(5, 150, 105, 0.18);
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
