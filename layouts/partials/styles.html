@@ -33,6 +33,16 @@
 {{ $glyphShadow := $br.glyphShadow | default "rgba(0,121,168,.6)" }}
 {{ $statsTint := $br.statsTint | default "#cdf1fa" }}
 {{ $bandFg  := $br.bandFg  | default "#d8f3fb" }}
+{{/* The gradient behind white text (primary button, CTA band). It defaults to
+     base -> deep, as before; an org whose base is too light to carry white
+     text at 4.5:1 moves it one step darker without changing its accent. */}}
+{{ $gradFrom := $br.gradFrom | default $base }}
+{{ $gradTo   := $br.gradTo   | default $deep }}
+{{/* The gradient the hero's accent words are painted with. It stays base ->
+     deep in both themes unless gradTextDark is set: with the darker button
+     gradient above, the same words would vanish into a dark background. */}}
+{{ $gradText := printf "linear-gradient(135deg,%s,%s)" $base $deep }}
+{{ $gradTextD := $br.gradTextDark | default $gradText }}
 {{ $sf  := $br.surfaces | default dict }}
 {{ $sfD := $br.surfacesDark | default dict }}
 <script>
@@ -43,7 +53,8 @@
   :root{
     /* brand */
     --cyan:{{ $base | safeCSS }}; --cyan-deep:{{ $deep | safeCSS }};
-    --grad:linear-gradient(135deg,{{ $base | safeCSS }},{{ $deep | safeCSS }});
+    --grad:linear-gradient(135deg,{{ $gradFrom | safeCSS }},{{ $gradTo | safeCSS }});
+    --grad-text:{{ $gradText | safeCSS }};
     /* interactive / text accent (brightens in dark for contrast) */
     --accent:{{ $base | safeCSS }}; --accent-deep:{{ $deep | safeCSS }};
     /* text + surfaces (light) */
@@ -62,7 +73,7 @@
   /* Dark theme — applied by the media query for un-forced "system", and by an explicit toggle. */
   @media(prefers-color-scheme:dark){
     :root:not([data-theme]){
-      --accent:{{ $bright | safeCSS }}; --accent-deep:{{ $bright | safeCSS }};
+      --accent:{{ $bright | safeCSS }}; --accent-deep:{{ $bright | safeCSS }}; --grad-text:{{ $gradTextD | safeCSS }};
       --ink:{{ $sfD.ink | default "#e6edf3" | safeCSS }}; --slate:{{ $sfD.slate | default "#9aa4b2" | safeCSS }}; --muted-2:{{ $sfD.muted2 | default "#7d8798" | safeCSS }};
       --line:{{ $sfD.line | default "#232a36" | safeCSS }}; --bg:{{ $sfD.bg | default "#0b0e14" | safeCSS }}; --bg-soft:{{ $sfD.bgSoft | default "#111620" | safeCSS }};
       --surface:{{ $sfD.surface | default "#141a24" | safeCSS }}; --surface-2:{{ $sfD.surface | default "#141a24" | safeCSS }};
@@ -74,7 +85,7 @@
     }
   }
   :root[data-theme="dark"]{
-    --accent:{{ $bright | safeCSS }}; --accent-deep:{{ $bright | safeCSS }};
+    --accent:{{ $bright | safeCSS }}; --accent-deep:{{ $bright | safeCSS }}; --grad-text:{{ $gradTextD | safeCSS }};
     --ink:{{ $sfD.ink | default "#e6edf3" | safeCSS }}; --slate:{{ $sfD.slate | default "#9aa4b2" | safeCSS }}; --muted-2:{{ $sfD.muted2 | default "#7d8798" | safeCSS }};
     --line:{{ $sfD.line | default "#232a36" | safeCSS }}; --bg:{{ $sfD.bg | default "#0b0e14" | safeCSS }}; --bg-soft:{{ $sfD.bgSoft | default "#111620" | safeCSS }};
     --surface:{{ $sfD.surface | default "#141a24" | safeCSS }}; --surface-2:{{ $sfD.surface | default "#141a24" | safeCSS }};
@@ -104,7 +115,9 @@
   .theme-toggle:hover{border-color:var(--ghost-border-hover)}
   .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:11px 18px;
     border-radius:12px;border:1px solid transparent;transition:.15s}
-  .btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 24px -10px {{ $shadow | safeCSS }}}
+  /* .lm prefix: ".lm a{color:inherit}" outranks a bare .btn-primary, which
+     painted the label in --ink -- near-black on the gradient in light mode. */
+  .lm .btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 24px -10px {{ $shadow | safeCSS }}}
   .btn-primary:hover{transform:translateY(-1px)}
   .btn-ghost{border-color:var(--line);color:var(--ink);background:var(--surface-2)}
   .btn-ghost:hover{border-color:var(--ghost-border-hover)}
@@ -116,7 +129,7 @@
   .pill{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--chip-fg);
     background:var(--chip-bg);border:1px solid var(--chip-border);padding:6px 12px;border-radius:999px}
   h1.head{font-size:54px;line-height:1.04;letter-spacing:-.035em;font-weight:850;margin:0}
-  h1.head .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1.head .accent{background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent}
   .sub{font-size:18.5px;color:var(--slate);margin:18px 0 26px;max-width:540px}
   .cta{display:flex;gap:12px;flex-wrap:wrap}
   .trust{margin-top:22px;display:flex;gap:22px;flex-wrap:wrap;color:var(--slate);font-size:13px;font-weight:600}
@@ -178,7 +191,7 @@
   .phero{padding:64px 0 18px;background:
     radial-gradient(900px 360px at 80% -10%,{{ $glow | safeCSS }},transparent 60%)}
   .phero h1{font-size:46px;line-height:1.05;letter-spacing:-.035em;font-weight:850;margin:10px 0 0}
-  .phero h1 .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .phero h1 .accent{background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent}
   .phero .sub{font-size:18px;color:var(--slate);margin:16px 0 0;max-width:760px}
   .psec{padding:46px 0}
   .psec h2{font-size:28px;letter-spacing:-.03em;font-weight:820;margin:0}
@@ -198,7 +211,7 @@
   td.na{color:var(--na)}
   .pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
   .pcard{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--surface)}
-  .pcard .n{font-size:30px;font-weight:850;letter-spacing:-.03em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .pcard .n{font-size:30px;font-weight:850;letter-spacing:-.03em;background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent}
   .pcard h3{margin:6px 0 6px;font-size:16px}
   .pcard p{margin:0;color:var(--slate);font-size:14px}
   .applist{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:16px}

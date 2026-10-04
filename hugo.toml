@@ -33,6 +33,14 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   glyphShadow = "rgba(5,150,105,.6)"
   statsTint   = "#a7f3d0"
   bandFg      = "#d1fae5"
+  # White on emerald-600 is 3.77:1, under the 4.5:1 body text needs; the band
+  # paragraph and the primary button sit on this gradient, so it runs one step
+  # darker than the accent: 700 -> 800 (white 5.48:1, #d1fae5 4.84:1 at worst).
+  gradFrom    = "#047857"
+  gradTo      = "#065f46"
+  # The hero's accent words: emerald-400 -> 300 on the dark background (the
+  # light theme keeps base -> deep, 600 -> 700).
+  gradTextDark = "linear-gradient(135deg,#34d399,#6ee7b7)"
   [params.brand.surfaces]
     ink        = "#052e22"
     slate      = "#065f46"
