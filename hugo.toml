@@ -11,7 +11,7 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   unsafe = true
 
 [params]
-  description = "go-fft is a pure-Go (CGO=0) FFT library — the numpy.fft / scipy.fft equivalent for Go, with no dependency on the native FFTW3 C library. SIMD kernels on four of the six 64-bit Go targets, plus AVX2 butterfly kernels on amd64."
+  description = "go-fft is a pure-Go (CGO=0) FFT library — the numpy.fft / scipy.fft equivalent for Go, with no dependency on the native FFTW3 C library. Pure Go on the six 64-bit targets, with AVX2 and AVX-512 kernels on amd64, bit-identical to the Go code."
 
 # The colours are the only thing that differs from go-authn's page, and they
 # are read here by partials/styles.html. Emerald, shared with go-ndarray: the
@@ -74,12 +74,12 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   name  = "fft"
   kind  = "library"
   href  = "https://github.com/go-fft/fft"
-  blurb = "The library. Complex &amp; real transforms (<code>FFT</code>/<code>IFFT</code>/<code>RFFT</code>/<code>IRFFT</code>), N-D and 2-D (<code>FFTN</code>/<code>FFT2</code>), frequency-bin helpers, windows, and spectral helpers (<code>PSD</code>/<code>Spectrogram</code>). Two kinds of SIMD kernel: a bit-identical complex multiply on amd64 (SSE2), arm64 (NEON), riscv64 (RVV) and s390x (vector) &mdash; four of the six 64-bit targets, with loong64/ppc64le on the validated scalar path &mdash; and <strong>AVX2 butterfly stage kernels</strong> on amd64, chosen at run time, 19&ndash;35% faster than SSE2 and bit-identical to it."
+  blurb = "The library. Complex &amp; real transforms of any length (<code>FFT</code>/<code>IFFT</code>/<code>RFFT</code>/<code>IRFFT</code>), N-D and 2-D (<code>FFTN</code>/<code>FFT2</code>), allocation-free plans (<code>NewPlan</code>, <code>NewPlanN</code>, <code>NewRealPlan2</code>), frequency-bin helpers, windows, and spectral helpers (<code>PSD</code>/<code>Spectrogram</code>). A mixed-radix Stockham engine, Rader and Bluestein for the other lengths, and on amd64 <strong>AVX2 and AVX-512 pass kernels</strong>, chosen at run time and bit-identical to the Go code."
 [[params.repos]]
   name  = "docs"
   kind  = "site"
   href  = "https://go-fft.github.io/docs/"
-  blurb = "The documentation site (Hugo + hugo-theme-relearn): API reference, the phased roadmap, and honest benchmark pages versus pocketfft / FFTW. <a href=\"https://github.com/go-fft/docs\">Source →</a>"
+  blurb = "The documentation site (Hugo + hugo-theme-relearn): the API, the phased roadmap, and benchmarks against FFTW, numpy/scipy (pocketfft) and gonum. <a href=\"https://github.com/go-fft/docs\">Source →</a>"
 [[params.repos]]
   name  = "brand"
   kind  = "assets"

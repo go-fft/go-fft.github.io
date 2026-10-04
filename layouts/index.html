@@ -19,7 +19,7 @@
   <div class="hero"><div class="wrap">
     <div>
       <h1 class="head">The discrete Fourier transform in pure Go.<br><span class="accent">numpy.fft semantics, no FFTW.</span></h1>
-      <p class="sub"><b>go-fft</b> computes the discrete Fourier transform of complex and real signals of <b>any length</b> — split-radix for power-of-two sizes, mixed-radix Cooley–Tukey for composites, Rader and Bluestein's chirp-z for primes — in <b>pure Go, with cgo disabled</b>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).</p>
+      <p class="sub"><b>go-fft</b> computes the discrete Fourier transform of complex and real signals of <b>any length</b> — an iterative mixed-radix Stockham engine for lengths with small prime factors, Rader and Bluestein's chirp-z for the rest — in <b>pure Go, with cgo disabled</b>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).</p>
       <div class="cta">
         <a class="btn btn-primary" href="https://github.com/go-fft">Browse the repositories →</a>
         <a class="btn btn-ghost" href="https://go-fft.github.io/docs/">Read the docs</a>
@@ -57,8 +57,8 @@ p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral de
       <div class="card"><div class="ico">🐹</div><h3>Pure Go</h3><p><code>CGO_ENABLED=0</code> across the org. No cgo, no FFTW, no native shims.</p></div>
       <div class="card"><div class="ico">✅</div><h3>100% test coverage</h3><p>Gated in CI, differentially checked against <code>numpy.fft</code>.</p></div>
       <div class="card"><div class="ico">🔢</div><h3>numpy.fft semantics</h3><p>The same normalization, bin layout and frequency conventions you already know.</p></div>
-      <div class="card"><div class="ico">⚡</div><h3>Multi-arch SIMD</h3><p>go-asmgen complex-multiply kernels on four 64-bit targets, validated per-arch (riscv64 hardware-validated on RVV 1.0), and AVX2 butterfly kernels on amd64 — every one of them asserted <i>bit-identical</i> to the scalar path, because a faster transform that answers differently is not the same transform. A portable scalar core everywhere.</p></div>
-      <div class="card"><div class="ico">💎</div><h3>The cgo-free FFT that was missing</h3><p>Ruby has no cgo-free FFT (every option wraps FFTW3) and <code>gonum/dsp/fourier</code>'s optimized assembly is amd64-only. go-fft is a fully portable scalar core.</p></div>
+      <div class="card"><div class="ico">⚡</div><h3>AVX2 &amp; AVX-512, bit-identical</h3><p>On amd64 the transform's passes run as go-asmgen AVX2 kernels, and AVX-512 for large powers of two — each tested <i>bit-identical</i> to the Go code, because a faster transform that answers differently is not the same transform. The same Go code runs on all six 64-bit targets.</p></div>
+      <div class="card"><div class="ico">💎</div><h3>The cgo-free FFT that was missing</h3><p>Ruby has no cgo-free FFT (every option wraps FFTW3) and <code>gonum/dsp/fourier</code>'s optimized assembly is amd64-only. go-fft runs on all six 64-bit Go targets, in pure Go.</p></div>
       <div class="card"><div class="ico">⚖️</div><h3>BSD-3-Clause</h3><p>On every source file.</p></div>
     </div>
   </div></section>
@@ -66,8 +66,8 @@ p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral de
   <section id="perf" style="padding-top:10px"><div class="wrap">
     <div class="stats">
       <div><div class="n">100%</div><div class="l">test coverage, differentially checked against numpy</div></div>
-      <div><div class="n">4/6</div><div class="l">64-bit Go targets with go-asmgen SIMD kernels</div></div>
-      <div><div class="n">19–35%</div><div class="l">AVX2 butterflies faster than SSE2, bit-identical</div></div>
+      <div><div class="n">24/24</div><div class="l">benchmark rows at or above numpy.fft and scipy.fft (v0.1.5, Zen 3)</div></div>
+      <div><div class="n">0.63×</div><div class="l">FFTW's time for a 2²⁰-point complex FFT (Zen 3; 0.59× on Neoverse-N1)</div></div>
       <div><div class="n">CGO=0</div><div class="l">no cgo, no FFTW, no native shims</div></div>
     </div>
   </div></section>
@@ -88,7 +88,7 @@ p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral de
   <section id="eco" style="padding-top:6px"><div class="wrap">
     <div class="band">
       <h2>The cgo-free FFT the Go and Ruby ecosystems lacked.</h2>
-      <p>No cgo, no FFTW. A fully portable scalar core with go-asmgen SIMD kernels on four of Go's six 64-bit targets, and AVX2 butterfly kernels on amd64 that are 19–35% faster than the SSE2 baseline and bit-identical to it.</p>
+      <p>No cgo, no FFTW. Pure Go on all six 64-bit targets, with AVX2 and AVX-512 kernels on amd64 that are bit-identical to the Go code. Ahead of FFTW on the largest transforms, behind it at small and mid sizes, and ahead of numpy and scipy at every size measured on Zen 3 — the numbers are on the <a href="https://go-fft.github.io/docs/performance/">performance page</a>.</p>
       <a class="btn btn-ghost" href="https://github.com/go-fft">Read the source on GitHub →</a>
     </div>
   </div></section>
