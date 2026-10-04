@@ -1,53 +1,98 @@
-{{ define "main" }}
-<section class="hero">
-  <img class="hero-logo" src="{{ "img/logo.svg" | relURL }}" alt="go-fft logo" width="96" height="96">
-  <h1>
-    <span class="accent">{{ .Site.Params.heroAccent }}</span>
-  </h1>
-  {{ with .Site.Params.heroTagline }}<p class="tag">{{ . }}</p>{{ end }}
-  <div class="intro">
-    {{ range .Site.Params.heroIntro }}<p>{{ . | safeHTML }}</p>{{ end }}
-  </div>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ .Site.Title }} — pure-Go FFT (numpy.fft for Go)</title>
+<meta name="description" content="{{ .Site.Params.description }}">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{{ partial "styles.html" . }}
+</head>
+<body class="lm">
+  <header class="nav"><div class="wrap">
+    <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-fft logo"> go-fft</a>
+    <nav><a href="#features">Why</a><a href="#repos">Repos</a><a href="#quality">Quality</a><a href="https://go-fft.github.io/docs/">Docs</a></nav>
+    {{ partial "theme-toggle.html" . }}
+    <a class="btn btn-ghost" href="https://github.com/go-fft">GitHub</a>
+  </div></header>
 
-<section id="why">
-  <h2>Why go-fft</h2>
-  <p>
-    The fast Fourier transform is the workhorse of signal processing, and in most
-    languages it means binding the native <strong>FFTW3</strong> C library. go-fft
-    brings the <code>numpy.fft</code> / <code>scipy.fft</code> vocabulary to Go with
-    <strong>no cgo and no FFTW</strong>: a single portable module that cross-compiles to
-    a static binary on every target, accelerated by go-asmgen-generated SIMD where the
-    Go assembler allows it. It is the cgo-free FFT the Go and Ruby ecosystems lacked.
-  </p>
-</section>
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1 class="head">The discrete Fourier transform in pure Go.<br><span class="accent">numpy.fft semantics, no FFTW.</span></h1>
+      <p class="sub"><b>go-fft</b> computes the discrete Fourier transform of complex and real signals of <b>any length</b> — split-radix for power-of-two sizes, mixed-radix Cooley–Tukey for composites, Rader and Bluestein's chirp-z for primes — in <b>pure Go, with cgo disabled</b>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/go-fft">Browse the repositories →</a>
+        <a class="btn btn-ghost" href="https://go-fft.github.io/docs/">Read the docs</a>
+      </div>
+      <div class="trust"><span><b>{{ len .Site.Params.repos }}</b> repositories</span><span><b>CGO_ENABLED=0</b>, no FFTW</span><span><b>100%</b> test coverage</span></div>
+    </div>
+    {{/* Lines taken verbatim from the API section of go-fft/fft's README. */}}
+    <div class="term">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">main.go</span></div>
+<pre><span class="c-cmd">import</span> <span class="c-str">"github.com/go-fft/fft"</span>
 
-<section id="repos">
-  <h2>Repositories</h2>
-  <div class="grid">
-    <div class="card">
-      <h4><a href="https://github.com/go-fft/fft">fft</a></h4>
-      <p>The library. Complex &amp; real transforms (<code>FFT</code>/<code>IFFT</code>/<code>RFFT</code>/<code>IRFFT</code>), N-D and 2-D (<code>FFTN</code>/<code>FFT2</code>), frequency-bin helpers, windows, and spectral helpers (<code>PSD</code>/<code>Spectrogram</code>). Two kinds of SIMD kernel: a bit-identical complex multiply on amd64 (SSE2), arm64 (NEON), riscv64 (RVV) and s390x (vector) &mdash; four of the six 64-bit targets, with loong64/ppc64le on the validated scalar path &mdash; and <strong>AVX2 butterfly stage kernels</strong> on amd64, chosen at run time, 19&ndash;35% faster than SSE2 and bit-identical to it.</p>
-    </div>
-    <div class="card">
-      <h4><a href="https://go-fft.github.io/docs/">docs</a></h4>
-      <p>The documentation site (Hugo + hugo-theme-relearn): API reference, the phased roadmap, and honest benchmark pages versus pocketfft / FFTW. <a href="https://github.com/go-fft/docs">Source →</a></p>
-    </div>
-    <div class="card">
-      <h4><a href="https://github.com/go-fft/brand">brand</a></h4>
-      <p>Logos and icons for the organization, in SVG / PNG / JPG / ICO / ICNS across colour, white and black variants.</p>
-    </div>
-  </div>
-</section>
+X := fft.FFT(x)          <span class="c-com">// forward DFT of []complex128, any length</span>
+y := fft.IFFT(X)         <span class="c-com">// inverse DFT, normalized by N (IFFT(FFT(x)) ≈ x)</span>
 
-<section id="quality">
-  <h2>Quality bar</h2>
-  <ul class="features">
-    <li><strong>Pure Go.</strong> <code>CGO_ENABLED=0</code> across the org. No cgo, no FFTW, no native shims.</li>
-    <li><strong>100% test coverage.</strong> Gated in CI, differentially checked against <code>numpy.fft</code>.</li>
-    <li><strong>numpy.fft semantics.</strong> The same normalization, bin layout and frequency conventions you already know.</li>
-    <li><strong>Multi-arch SIMD.</strong> go-asmgen complex-multiply kernels on four 64-bit targets, validated per-arch (riscv64 hardware-validated on RVV 1.0), and AVX2 butterfly kernels on amd64 &mdash; every one of them asserted <em>bit-identical</em> to the scalar path, because a faster transform that answers differently is not the same transform. A portable scalar core everywhere.</li>
-    <li><strong>BSD-3-Clause</strong> on every source file.</li>
-  </ul>
-</section>
-{{ end }}
+R := fft.RFFT(r)         <span class="c-com">// real-input DFT, non-redundant N/2+1 bins (numpy.fft.rfft)</span>
+z := fft.IRFFT(R, len(r)) <span class="c-com">// back to []float64 (numpy.fft.irfft)</span>
+
+<span class="c-com">// Windowing and spectral helpers:</span>
+w  := fft.Hann(n)             <span class="c-com">// also Hamming, Blackman, BlackmanHarris, Bartlett</span>
+f  := fft.FFTFreq(n, d)       <span class="c-com">// bin frequencies (numpy.fft.fftfreq)</span>
+p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral density (periodogram)</span></pre>
+    </div>
+  </div></div>
+
+  <div class="strip"><div class="wrap">
+    <span class="lead-line">{{ len .Site.Params.repos }} repositories — <b>one cgo-free module</b> that cross-compiles to a static binary on every target</span>
+    <div class="mods">{{ range .Site.Params.repos }}<a href="{{ .href }}">{{ .name }}</a>{{ end }}</div>
+  </div></div>
+
+  <section id="features"><div class="wrap">
+    <span class="eyebrow">Why go-fft</span>
+    <h2>The workhorse of signal processing, <i>without</i> FFTW.</h2>
+    <p class="lead">The fast Fourier transform is the workhorse of signal processing, and in most languages it means binding the native <b>FFTW3</b> C library. go-fft brings the <code>numpy.fft</code> / <code>scipy.fft</code> vocabulary to Go with <b>no cgo and no FFTW</b>: a single portable module that cross-compiles to a static binary on every target, accelerated by go-asmgen-generated SIMD where the Go assembler allows it.</p>
+    <div class="grid" id="quality">
+      <div class="card"><div class="ico">🐹</div><h3>Pure Go</h3><p><code>CGO_ENABLED=0</code> across the org. No cgo, no FFTW, no native shims.</p></div>
+      <div class="card"><div class="ico">✅</div><h3>100% test coverage</h3><p>Gated in CI, differentially checked against <code>numpy.fft</code>.</p></div>
+      <div class="card"><div class="ico">🔢</div><h3>numpy.fft semantics</h3><p>The same normalization, bin layout and frequency conventions you already know.</p></div>
+      <div class="card"><div class="ico">⚡</div><h3>Multi-arch SIMD</h3><p>go-asmgen complex-multiply kernels on four 64-bit targets, validated per-arch (riscv64 hardware-validated on RVV 1.0), and AVX2 butterfly kernels on amd64 — every one of them asserted <i>bit-identical</i> to the scalar path, because a faster transform that answers differently is not the same transform. A portable scalar core everywhere.</p></div>
+      <div class="card"><div class="ico">💎</div><h3>The cgo-free FFT that was missing</h3><p>Ruby has no cgo-free FFT (every option wraps FFTW3) and <code>gonum/dsp/fourier</code>'s optimized assembly is amd64-only. go-fft is a fully portable scalar core.</p></div>
+      <div class="card"><div class="ico">⚖️</div><h3>BSD-3-Clause</h3><p>On every source file.</p></div>
+    </div>
+  </div></section>
+
+  <section id="perf" style="padding-top:10px"><div class="wrap">
+    <div class="stats">
+      <div><div class="n">100%</div><div class="l">test coverage, differentially checked against numpy</div></div>
+      <div><div class="n">4/6</div><div class="l">64-bit Go targets with go-asmgen SIMD kernels</div></div>
+      <div><div class="n">19–35%</div><div class="l">AVX2 butterflies faster than SSE2, bit-identical</div></div>
+      <div><div class="n">CGO=0</div><div class="l">no cgo, no FFTW, no native shims</div></div>
+    </div>
+  </div></section>
+
+  <section id="repos" style="padding-top:20px"><div class="wrap">
+    <span class="eyebrow">Repositories</span>
+    <h2>What is here.</h2>
+    <div class="road">
+      {{ range .Site.Params.repos }}
+      <div class="ph">
+        <div class="top"><h4><a href="{{ .href }}">{{ .name }}</a></h4><span class="tag active">{{ .kind }}</span></div>
+        <p>{{ .blurb | safeHTML }}</p>
+      </div>
+      {{ end }}
+    </div>
+  </div></section>
+
+  <section id="eco" style="padding-top:6px"><div class="wrap">
+    <div class="band">
+      <h2>The cgo-free FFT the Go and Ruby ecosystems lacked.</h2>
+      <p>No cgo, no FFTW. A fully portable scalar core with go-asmgen SIMD kernels on four of Go's six 64-bit targets, and AVX2 butterfly kernels on amd64 that are 19–35% faster than the SSE2 baseline and bit-identical to it.</p>
+      <a class="btn btn-ghost" href="https://github.com/go-fft">Read the source on GitHub →</a>
+    </div>
+  </div></section>
+
+  <footer><div class="wrap"><span>go-fft · <a href="https://github.com/go-fft">go-fft on GitHub</a> · BSD-3-Clause</span><span>Pure Go · CGO_ENABLED=0 · no FFTW</span></div></footer>
+</body>
+</html>
