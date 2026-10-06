@@ -66,8 +66,8 @@ p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral de
   <section id="perf" style="padding-top:10px"><div class="wrap">
     <div class="stats">
       <div><div class="n">100%</div><div class="l">test coverage, differentially checked against numpy</div></div>
-      <div><div class="n">24/24</div><div class="l">benchmark rows at or above numpy.fft and scipy.fft, on each of three hosts (v0.13.0)</div></div>
-      <div><div class="n">0.46×</div><div class="l">FFTW's time for a 2²⁰-point complex FFT on Neoverse-N1 (0.53× on Zen 3, 0.83× on Cascade Lake)</div></div>
+      <div><div class="n">24/24</div><div class="l">benchmark rows at or above numpy.fft and scipy.fft, on each of three hosts (v0.16)</div></div>
+      <div><div class="n">21/24</div><div class="l">benchmark rows at or above FFTW on Neoverse-N1 (13/24 on Zen 3), v0.16</div></div>
       <div><div class="n">CGO=0</div><div class="l">no cgo, no FFTW, no native shims</div></div>
     </div>
   </div></section>
@@ -88,7 +88,7 @@ p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral de
   <section id="eco" style="padding-top:6px"><div class="wrap">
     <div class="band">
       <h2>The cgo-free FFT the Go and Ruby ecosystems lacked.</h2>
-      <p>No cgo, no FFTW. Pure Go on all six 64-bit targets, with AVX2 and AVX-512 kernels on amd64 and NEON kernels on arm64, all bit-identical to the Go code. Ahead of FFTW on the largest transforms, on primes, and from 1024 points on arm64; behind it at small and mid sizes on amd64 and on smooth composites; and at or above numpy and scipy at every size measured on all three hosts — the numbers are on the <a href="https://go-fft.github.io/docs/performance/">performance page</a>.</p>
+      <p>No cgo, no FFTW. Pure Go on all six 64-bit targets, with AVX2 and AVX-512 kernels on amd64 and NEON kernels on arm64, all bit-identical to the Go code. Ahead of FFTW on 21 of 24 rows on arm64, from 4096 points and on primes on amd64; behind it at small sizes on Intel and on composites on amd64; and at or above numpy and scipy at every size measured on all three hosts — the numbers are on the <a href="https://go-fft.github.io/docs/performance/">performance page</a>.</p>
       <a class="btn btn-ghost" href="https://github.com/go-fft">Read the source on GitHub →</a>
     </div>
   </div></section>
