@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: the site builds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.167.0"
+          extended: true
+      - run: hugo --minify
+      # A page that builds and says nothing is a page nobody notices is empty.
+      - name: every repository is on it
+        run: |
+          for repo in fft docs brand; do
+            grep -q "go-fft/$repo" public/index.html \
+              || { echo "::error::$repo is not on the page"; exit 1; }
+          done
+          echo "the page names every repository this org has"

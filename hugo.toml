@@ -85,3 +85,27 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   kind  = "assets"
   href  = "https://github.com/go-fft/brand"
   blurb = "Logos and icons for the organization, in SVG / PNG / JPG / ICO / ICNS across colour, white and black variants."
+
+# The API cards (#api) and the count in the hero come from this list, never
+# from a number typed beside it.
+[[params.families]]
+  name = "Complex 1-D"
+  what = "`FFT`, `IFFT` and `Plan` for any length: Stockham for lengths whose prime factors are at most 13, Rader or Bluestein for the rest."
+[[params.families]]
+  name = "Real 1-D and Hermitian"
+  what = "`RFFT`, `IRFFT`, `HFFT`, `IHFFT` and `RealPlan`: the N/2+1 non-redundant bins, as `numpy.fft.rfft` returns them."
+[[params.families]]
+  name = "N-D and 2-D"
+  what = "`FFTN`, `FFT2`, `RFFTN`, `RFFT2` and allocation-free `PlanN`/`RealPlan2`, over a row-major shape, spread across cores when large."
+[[params.families]]
+  name = "numpy's arguments"
+  what = "`n`, `norm` and `axes` through the `...With(Options)` variants, whose zero value is numpy's defaults; `FFTShift` and `NextFastLen`."
+[[params.families]]
+  name = "DCT and DST"
+  what = "Types I–IV, forward, inverse and N-D, as `scipy.fft.dct` and `dst` define them, with reusable plans."
+[[params.families]]
+  name = "Single precision"
+  what = "Every function above with `32` appended: `complex64` in, `complex64` out, as scipy.fft and NumPy 2 keep it, on its own AVX2 and NEON kernels."
+[[params.families]]
+  name = "Windows and spectra"
+  what = "`Hann`, `Hamming`, `Blackman`, `BlackmanHarris`, `Bartlett`, `FFTFreq`, `RFFTFreq`, `PSD` and `Spectrogram`."

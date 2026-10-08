@@ -11,9 +11,9 @@
 <body class="lm">
   <header class="nav"><div class="wrap">
     <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-fft logo"> go-fft</a>
-    <nav><a href="#features">Why</a><a href="#repos">Repos</a><a href="#quality">Quality</a><a href="https://go-fft.github.io/docs/">Docs</a></nav>
+    <nav><a href="#features">Why</a><a href="#check">Accuracy</a><a href="#api">API</a><a href="#repos">Repositories</a></nav>
     {{ partial "theme-toggle.html" . }}
-    <a class="btn btn-ghost" href="https://github.com/go-fft">GitHub</a>
+    <a class="btn btn-ghost" href="https://github.com/go-fft">{{ partial "icons/github.html" . }}GitHub</a>
   </div></header>
 
   <div class="hero"><div class="wrap">
@@ -21,10 +21,10 @@
       <h1 class="head">The discrete Fourier transform in pure Go.<br><span class="accent">numpy.fft semantics, no FFTW.</span></h1>
       <p class="sub"><b>go-fft</b> computes the discrete Fourier transform of complex and real signals of <b>any length</b> — an iterative mixed-radix Stockham engine for lengths with small prime factors, Rader and Bluestein's chirp-z for the rest — in <b>pure Go, with cgo disabled</b>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).</p>
       <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/go-fft">Browse the repositories →</a>
-        <a class="btn btn-ghost" href="https://go-fft.github.io/docs/">Read the docs</a>
+        <a class="btn btn-primary" href="https://go-fft.github.io/docs/">Read the documentation →</a>
+        <a class="btn btn-ghost" href="https://github.com/go-fft/fft">{{ partial "icons/github.html" . }}Browse the source</a>
       </div>
-      <div class="trust"><span><b>{{ len .Site.Params.repos }}</b> repositories</span><span><b>CGO_ENABLED=0</b>, no FFTW</span><span><b>100%</b> test coverage</span></div>
+      <div class="trust"><span><b>{{ len .Site.Params.families }}</b> API families, numpy and scipy names</span><span><b>6</b> 64-bit targets</span><span><b>CGO=0</b> no FFTW</span></div>
     </div>
     {{/* Lines taken verbatim from the API section of go-fft/fft's README. */}}
     <div class="term">
@@ -49,6 +49,30 @@ p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral de
     <div class="mods">{{ range .Site.Params.repos }}<a href="{{ .href }}">{{ .name }}</a>{{ end }}</div>
   </div></div>
 
+  <section id="check" style="padding-top:10px"><div class="wrap">
+    <span class="eyebrow">Ask it, do not take our word</span>
+    <h2>One length per engine, <i>checked against itself</i>.</h2>
+    <p class="lead">Five lengths, one for each way go-fft takes a transform: powers of two and smooth composites on the Stockham engine, a prime through Rader's algorithm, another through Bluestein's chirp-z. For each, how far <code>IFFT(FFT(x))</code> lands from <code>x</code>, and how well Parseval's identity holds. The output below is a real run against the published module, with nothing edited.</p>
+    <div class="term" style="margin-top:22px">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">go run ./fftcheck — zsh</span></div>
+{{/* Verbatim: go run of a 40-line program against github.com/go-fft/fft
+     v0.19.1, on an Apple M4 (arm64, NEON kernels), 2026-10-08. Re-run it and
+     paste its output when the engines change; never retype a number here.
+     The 2^20 Parseval figure is mostly the program's own float64 sum of a
+     million squares, not the transform. */}}
+<pre style="white-space:pre;overflow-x:auto"><span class="c-com"># go-fft v0.19.1 on arm64 — round trip and Parseval, max error</span>
+<span class="c-cmd">$ go run</span> ./fftcheck
+<span class="c-out">N       LENGTH                 ROUND TRIP     PARSEVAL
+4096    2^12, Stockham         9.2e-16        4.7e-15
+1296    2^4·3^4, Stockham      1.6e-15        1.9e-15
+1009    prime, Rader           2.4e-15        3.4e-16
+10007   prime, Bluestein       2.7e-15        1.5e-15
+1048576 2^20, Stockham         1.9e-15        7.6e-14
+
+NextFastLen(1009) = 1024</span></pre>
+    </div>
+  </div></section>
+
   <section id="features"><div class="wrap">
     <span class="eyebrow">Why go-fft</span>
     <h2>The workhorse of signal processing, <i>without</i> FFTW.</h2>
@@ -60,6 +84,16 @@ p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral de
       <div class="card"><div class="ico">⚡</div><h3>AVX2, AVX-512 &amp; NEON, bit-identical</h3><p>On amd64 the transform's passes run as go-asmgen AVX2 kernels, and AVX-512 for large powers of two; on arm64 as NEON kernels that reproduce the compiler's own fused multiply-adds — each tested <i>bit-identical</i> to the Go code, because a faster transform that answers differently is not the same transform. The same Go code runs on all six 64-bit targets.</p></div>
       <div class="card"><div class="ico">💎</div><h3>The cgo-free FFT that was missing</h3><p>Ruby has no cgo-free FFT (every option wraps FFTW3) and <code>gonum/dsp/fourier</code>'s optimized assembly is amd64-only. go-fft runs on all six 64-bit Go targets, in pure Go.</p></div>
       <div class="card"><div class="ico">⚖️</div><h3>BSD-3-Clause</h3><p>On every source file.</p></div>
+    </div>
+  </div></section>
+
+  <section id="api" style="padding-top:10px"><div class="wrap">
+    <span class="eyebrow">What the module offers</span>
+    <h2>{{ len .Site.Params.families }} families, <i>numpy's and scipy's names</i>.</h2>
+    <div class="grid">
+      {{ range .Site.Params.families }}
+      <div class="card"><h3>{{ .name }}</h3><p>{{ .what | markdownify }}</p></div>
+      {{ end }}
     </div>
   </div></section>
 
@@ -89,7 +123,7 @@ p  := fft.PSD(sig, d)         <span class="c-com">// one-sided power spectral de
     <div class="band">
       <h2>The cgo-free FFT the Go and Ruby ecosystems lacked.</h2>
       <p>No cgo, no FFTW. Pure Go on all six 64-bit targets, with AVX2 and AVX-512 kernels on amd64 and NEON kernels on arm64, all bit-identical to the Go code. Ahead of FFTW on 23 of 24 rows on arm64 and on 15 of 24 on AMD; behind it at small sizes on amd64 and on mid-size real transforms on Intel; and at or above numpy and scipy at every size measured on all three hosts — the numbers are on the <a href="https://go-fft.github.io/docs/performance/">performance page</a>.</p>
-      <a class="btn btn-ghost" href="https://github.com/go-fft">Read the source on GitHub →</a>
+      <a class="btn btn-ghost" href="https://github.com/go-fft/fft">{{ partial "icons/github.html" . }}Read the source on GitHub →</a>
     </div>
   </div></section>
 
