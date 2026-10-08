@@ -43,7 +43,10 @@ jobs:
         run: go vet ./...
       - name: test, 100% statement coverage
         run: |
-          go test -coverprofile=coverage.out ./...
+          # The package, not ./...: cmd/playground-wasm is the js/wasm shell,
+          # whose native build is an empty main() stub with nothing to cover.
+          go test ./...
+          go test -coverprofile=coverage.out .
           go tool cover -func=coverage.out
           below=$(go tool cover -func=coverage.out | awk '$NF != "100.0%"')
           if [ -n "$below" ]; then echo "::error::coverage below 100% on:"; echo "$below"; exit 1; fi
