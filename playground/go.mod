@@ -3,7 +3,7 @@ module github.com/go-fft/go-fft.github.io/playground
 go 1.27.1
 
 require (
-	github.com/go-fft/fft v0.19.1
+	github.com/go-fft/fft v0.21.0
 	github.com/go-opentype/fonts v0.10.0
 	github.com/go-widgets/mvvm v0.13.0
 	github.com/go-widgets/mvvmtk v0.14.1
