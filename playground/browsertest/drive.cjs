@@ -170,6 +170,17 @@ async function run(theme) {
   ok(JSON.stringify(px2) === JSON.stringify(hex(want)), `after the toggle the canvas background is ${px2}, want ${hex(want)}`);
   await page.screenshot({ path: path.join(out, `pg-${theme}-toggled.png`) });
 
+  // 9. Phone width: the page itself never scrolls sideways; the stage does,
+  // over a canvas that keeps its working size and still paints.
+  await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2 }); // the ratio is read once, at start
+  await new Promise(r => setTimeout(r, 400));
+  const phone = await page.evaluate(() => {
+    const st = document.querySelector(".stage"), c = document.getElementById("gofft-canvas");
+    return { doc: document.documentElement.scrollWidth, stage: st.scrollWidth, cw: c.clientWidth, w: c.width };
+  });
+  ok(phone.doc <= 390 && phone.stage >= 1100 && phone.cw === 1100 && phone.w === 2200, `phone: page ${phone.doc}px wide, stage scrolls ${phone.stage}px, canvas ${phone.cw} CSS / ${phone.w} device px`);
+  await page.screenshot({ path: path.join(out, `pg-${theme}-phone.png`) });
+
   ok(errors.length === 0, "no page errors" + (errors.length ? ": " + errors.join(" | ") : ""));
   await browser.close();
 }
