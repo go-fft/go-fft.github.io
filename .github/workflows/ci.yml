@@ -13,7 +13,7 @@ jobs:
     name: the site builds
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "0.167.0"
