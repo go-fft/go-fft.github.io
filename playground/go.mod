@@ -8,7 +8,7 @@ require (
 	github.com/go-widgets/mvvm v0.13.0
 	github.com/go-widgets/mvvmtk v0.14.1
 	github.com/go-widgets/painter v0.15.0
-	github.com/go-widgets/toolkit v0.326.1-0.20261008080832-664e155a431a
+	github.com/go-widgets/toolkit v0.327.0
 	github.com/go-widgets/webcanvas v0.2.0
 )
 
