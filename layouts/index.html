@@ -11,7 +11,7 @@
 <body class="lm">
   <header class="nav"><div class="wrap">
     <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-fft logo"> go-fft</a>
-    <nav><a href="#features">Why</a><a href="#check">Accuracy</a><a href="#api">API</a><a href="#repos">Repositories</a></nav>
+    <nav><a href="#features">Why</a><a href="#check">Accuracy</a><a href="#api">API</a><a href="#repos">Repositories</a><a href="/playground/">Playground</a></nav>
     {{ partial "theme-toggle.html" . }}
     <a class="btn btn-ghost" href="https://github.com/go-fft">{{ partial "icons/github.html" . }}GitHub</a>
   </div></header>
@@ -22,6 +22,7 @@
       <p class="sub"><b>go-fft</b> computes the discrete Fourier transform of complex and real signals of <b>any length</b> — an iterative mixed-radix Stockham engine for lengths with small prime factors, Rader and Bluestein's chirp-z for the rest — in <b>pure Go, with cgo disabled</b>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).</p>
       <div class="cta">
         <a class="btn btn-primary" href="https://go-fft.github.io/docs/">{{ partial "icons/book.html" . }}Read the documentation →</a>
+        <a class="btn btn-ghost" href="/playground/">{{ partial "icons/play.html" . }}Try it in your browser</a>
         <a class="btn btn-ghost" href="https://github.com/go-fft/fft">{{ partial "icons/github.html" . }}Browse the source</a>
       </div>
       <div class="trust"><span><b>{{ len .Site.Params.families }}</b> API families, numpy and scipy names</span><span><b>6</b> 64-bit targets</span><span><b>CGO=0</b> no FFTW</span></div>

@@ -49,6 +49,21 @@ jobs:
         with:
           submodules: recursive
 
+      # The playground's wasm is built FRESH from playground/ on every run and
+      # never committed: a compiled wasm is not byte-reproducible across
+      # machines, so a committed copy is a build artifact nobody rebuilds, and
+      # it goes stale silently (go-tex's playground shipped a stale UI that way).
+      - uses: actions/setup-go@v7
+        with:
+          go-version: "1.27.1"
+          cache-dependency-path: playground/go.sum
+
+      - name: Build the playground wasm
+        working-directory: playground
+        env:
+          GOWORK: "off"
+        run: GOOS=js GOARCH=wasm go build -trimpath -ldflags='-s -w' -o ../static/playground/playground.wasm ./cmd/playground-wasm
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v6
@@ -57,6 +72,9 @@ jobs:
         env:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
+          # Cache-busts the playground wasm: each deploy is a new URL, so a
+          # cached copy can only ever be the bytes this deploy built.
+          HUGO_PARAMS_WASMSHA: ${{ github.sha }}
         run: |
           hugo \
             --gc \

@@ -1,0 +1,120 @@
+# The playground (playground/, a nested Go module): a go-widgets canvas
+# application compiled to WebAssembly and served at /playground/.
+#
+#   test     gofmt, vet, native tests at EXACTLY 100% statement coverage, -race,
+#            and the js/wasm build, whose size is reported
+#   lint     the fleet's two UI gates, each with a negative control proving it
+#            can still bite: mvvmlint (widget state goes through go-widgets/mvvm)
+#            and bricolint (no hand-drawn UI: every pixel from a toolkit widget)
+#   browser  the built site in a real headless Chrome, light and dark each
+#            forced: pixels on the canvas, and synthetic clicks, typing, a ⌘V
+#            paste, a hover and the theme toggle (playground/browsertest)
+name: playground
+
+on:
+  push:
+    branches: [main]
+    paths: ["playground/**", "layouts/**", "static/**", "content/**", ".github/workflows/playground.yml"]
+  pull_request:
+    paths: ["playground/**", "layouts/**", "static/**", "content/**", ".github/workflows/playground.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GOWORK: "off"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: playground
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: "1.27.1"
+          cache-dependency-path: playground/go.sum
+      - name: gofmt
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - name: vet
+        run: go vet ./...
+      - name: test, 100% statement coverage
+        run: |
+          # The package, not ./...: cmd/playground-wasm is the js/wasm shell,
+          # whose native build is an empty main() stub with nothing to cover.
+          go test ./...
+          go test -coverprofile=coverage.out .
+          go tool cover -func=coverage.out
+          below=$(go tool cover -func=coverage.out | awk '$NF != "100.0%"')
+          if [ -n "$below" ]; then echo "::error::coverage below 100% on:"; echo "$below"; exit 1; fi
+      - name: race
+        run: go test -race ./...
+      - name: js/wasm build, and its size
+        run: |
+          GOOS=js GOARCH=wasm go build -trimpath -ldflags='-s -w' -o "$RUNNER_TEMP/playground.wasm" ./cmd/playground-wasm
+          raw=$(stat -c %s "$RUNNER_TEMP/playground.wasm"); gz=$(gzip -9 -c "$RUNNER_TEMP/playground.wasm" | wc -c)
+          echo "playground.wasm: $raw bytes, $gz gzipped" | tee -a "$GITHUB_STEP_SUMMARY"
+
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: playground
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: "1.27.1"
+          cache-dependency-path: playground/go.sum
+      - name: install the gates
+        run: |
+          go install github.com/go-widgets/mvvmlint/cmd/mvvmlint@v0.4.0
+          go install github.com/go-widgets/bricolint/cmd/bricolint@v0.1.0
+      - name: mvvmlint
+        run: go vet -vettool="$(go env GOPATH)/bin/mvvmlint" ./...
+      - name: bricolint
+        run: go vet -vettool="$(go env GOPATH)/bin/bricolint" ./...
+      - name: negative controls (each gate must bite)
+        run: BRICOLINT="$(go env GOPATH)/bin/bricolint" MVVMLINT="$(go env GOPATH)/bin/mvvmlint" bash hack/negative-controls.sh
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: "1.27.1"
+          cache-dependency-path: playground/go.sum
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
+        id: chrome
+        with:
+          chrome-version: stable
+          install-dependencies: true
+      - run: npm install --no-save --prefix "$RUNNER_TEMP/pptr" puppeteer-core@24.43.1
+      - name: build the wasm into the site
+        working-directory: playground
+        run: GOOS=js GOARCH=wasm go build -trimpath -ldflags='-s -w' -o ../static/playground/playground.wasm ./cmd/playground-wasm
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.167.0"
+          extended: true
+      - run: hugo --minify --destination "$RUNNER_TEMP/site"
+      - name: drive the page in Chrome, light and dark
+        env:
+          CHROME: ${{ steps.chrome.outputs.chrome-path }}
+          NODE_PATH: ${{ runner.temp }}/pptr/node_modules
+        run: |
+          python3 playground/browsertest/serve.py "$RUNNER_TEMP/site" "$RUNNER_TEMP/port" &
+          for _ in $(seq 50); do [ -s "$RUNNER_TEMP/port" ] && break; sleep 0.1; done
+          node playground/browsertest/drive.cjs "http://127.0.0.1:$(cat "$RUNNER_TEMP/port")/playground/" "$RUNNER_TEMP/shots"
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: playground-screenshots
+          path: ${{ runner.temp }}/shots

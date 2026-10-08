@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ .Site.Title }} — playground: FFT in your browser</title>
+<meta name="description" content="Build a signal, pick a transform and see what go-fft makes of it — go-fft itself compiled to WebAssembly, running in your browser, with no JavaScript FFT and no server.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{{ partial "styles.html" . }}
+<style>
+/* Playground-only. The page is the landing's header over ONE canvas: a
+   go-widgets application (playground/ in this repository) compiled to
+   WebAssembly, which draws every control itself. The canvas takes the whole
+   viewport under the header; the only other HTML is the loading placeholder
+   and an error banner painted over it. */
+html,body{height:100%}
+body.pg{overflow:hidden}
+.pg .nav nav a.here{color:var(--ink)}
+.stage{position:fixed;left:0;right:0;top:65px;bottom:0;background:var(--bg);overflow:auto;-webkit-overflow-scrolling:touch}
+/* The application lays out a controls column beside two plots and the code;
+   below 1100×720 CSS pixels it would crush them, so the canvas keeps that
+   size and the stage scrolls natively instead (a phone pans it by touch). */
+#gofft-canvas{display:block;width:max(100%,1100px);height:max(100%,720px);opacity:0;transition:opacity .2s}
+.stage.ready #gofft-canvas{opacity:1}
+#pg-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--slate);font-size:14px}
+.stage.ready #pg-placeholder{display:none}
+.pg-track{width:min(420px,72%);height:8px;border-radius:6px;background:var(--line);overflow:hidden}
+.pg-fill{height:100%;width:0;background:var(--accent);transition:width .15s ease}
+#pg-pct{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+#pg-err{display:none;position:fixed;top:76px;left:12px;right:12px;z-index:30;margin:0;padding:11px 13px;border-radius:10px;
+  background:#fdecec;color:#9b1c1c;white-space:pre-wrap;font:12.5px/1.45 ui-monospace,Menlo,monospace}
+:root[data-theme="dark"] #pg-err{background:#3a1113;color:#f7b4b4}
+@media (prefers-color-scheme:dark){:root:not([data-theme]) #pg-err{background:#3a1113;color:#f7b4b4}}
+#pg-err.show{display:block}
+</style>
+</head>
+<body class="lm pg">
+  <header class="nav"><div class="wrap">
+    <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-fft logo"> go-fft</a>
+    <nav><a href="/">Home</a><a href="/#api">API</a><a class="here" href="/playground/">Playground</a><a href="https://go-fft.github.io/docs/">Docs</a></nav>
+    {{ partial "theme-toggle.html" . }}
+    <a class="btn btn-ghost" href="https://github.com/go-fft">{{ partial "icons/github.html" . }}GitHub</a>
+  </div></header>
+
+  <pre id="pg-err"></pre>
+  <div class="stage">
+    <canvas id="gofft-canvas"></canvas>
+    <div id="pg-placeholder">
+      <div id="pg-msg">Downloading go-fft, compiled to WebAssembly…</div>
+      <div class="pg-track"><div class="pg-fill" id="pg-fill"></div></div>
+      <div id="pg-pct">0%</div>
+      <noscript>The playground is a WebAssembly application: it needs JavaScript to start.</noscript>
+    </div>
+  </div>
+
+<script src="/playground/wasm_exec.js"></script>
+<script>
+"use strict";
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  // The wasm is BUILT by the deploy workflow from playground/ and never
+  // committed (a committed copy is a build artifact nobody rebuilds). The
+  // deploy's commit sha rides on the URL, so every deploy is a new URL and a
+  // cached copy can only be the bytes this page was built with.
+  {{ $url := "/playground/playground.wasm" }}
+  {{ with .Site.Params.wasmsha }}{{ $url = printf "%s?v=%s" $url . }}{{ end }}
+  var wasmURL={{ $url }};
+  // The DECOMPRESSED size, read when the site was built: Pages serves the wasm
+  // gzipped, the stream reader yields decompressed bytes, and Content-Length is
+  // the compressed length — so the bar is driven against this. Zero when the
+  // wasm was not built (a bare `hugo server`): the bar then uses Content-Length.
+  {{ $bytes := 0 }}{{ with (os.Stat "static/playground/playground.wasm") }}{{ $bytes = .Size }}{{ end }}
+  var wasmBytes={{ $bytes }};
+
+  // The canvas wears the page's own colours: read them from the stylesheet's
+  // custom properties (light or dark, and the brand accent from
+  // [params.brand]) and hand them to the application.
+  function palette(){
+    var cs=getComputedStyle(document.documentElement);
+    var v=function(n){return cs.getPropertyValue(n).trim();};
+    return {bg:v("--bg"),surface:v("--bg-soft"),ink:v("--ink"),line:v("--line"),border:v("--ghost-border-hover"),accent:v("--accent")};
+  }
+  function syncTheme(){ if(globalThis.gofftSetPalette) gofftSetPalette(palette()); }
+  new MutationObserver(syncTheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  if(window.matchMedia){ try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",syncTheme); }catch(e){} }
+
+  // ⌘V / Ctrl+V: the canvas leaves the shortcut to the browser, which raises a
+  // paste event; its text goes to the field or the sample editor.
+  window.addEventListener("paste",function(e){
+    var t=e.clipboardData&&e.clipboardData.getData("text/plain");
+    if(t&&globalThis.gofftPaste&&gofftPaste(t)) e.preventDefault();
+  });
+
+  function setProgress(f){
+    var fill=$("pg-fill"),pct=$("pg-pct");
+    if(f==null){fill.style.width="100%";fill.style.opacity=".45";pct.textContent="…";return;}
+    var p=Math.max(0,Math.min(100,Math.round(f*100)));
+    fill.style.width=p+"%";pct.textContent=p+"%";
+  }
+  function fail(e){
+    $("pg-msg").textContent="The playground failed to load.";
+    $("pg-err").textContent="Failed to load "+wasmURL+": "+String(e)+
+      (location.protocol==="file:"?"\n(open this page over http:// — file:// cannot fetch the wasm.)":"");
+    $("pg-err").classList.add("show");
+  }
+  var go=new Go();
+  fetch(wasmURL).then(function(r){
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    var total=wasmBytes||parseInt(r.headers.get("Content-Length")||"0",10)||0;
+    if(!r.body||!r.body.getReader) return r.arrayBuffer();
+    var reader=r.body.getReader(),got=0,chunks=[];
+    return (function pump(){
+      return reader.read().then(function(res){
+        if(res.done){
+          var buf=new Uint8Array(got),pos=0;
+          chunks.forEach(function(c){buf.set(c,pos);pos+=c.length;});
+          return buf.buffer;
+        }
+        chunks.push(res.value);got+=res.value.length;
+        setProgress(total?got/total:null);
+        return pump();
+      });
+    })();
+  }).then(function(ab){
+    var m=new Uint8Array(ab,0,4);
+    if(!(m[0]===0&&m[1]===0x61&&m[2]===0x73&&m[3]===0x6d)) throw new Error("the URL did not return a WebAssembly module");
+    $("pg-msg").textContent="Starting…";
+    return WebAssembly.instantiate(ab,go.importObject);
+  }).then(function(res){
+    go.run(res.instance);
+    var t=setInterval(function(){
+      if(globalThis.webcanvasReady){
+        clearInterval(t);
+        syncTheme();
+        document.querySelector(".stage").classList.add("ready");
+      }
+    },30);
+  }).catch(fail);
+})();
+</script>
+</body>
+</html>

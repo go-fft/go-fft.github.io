@@ -2,3 +2,6 @@ public/
 resources/
 .hugo_build.lock
 .DS_Store
+# Built by the deploy workflow from playground/, never committed: a compiled
+# wasm is not reproducible across machines and a committed copy goes stale.
+static/playground/playground.wasm
