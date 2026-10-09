@@ -101,8 +101,8 @@ NextFastLen(1009) = 1024</span></pre>
   <section id="perf" style="padding-top:10px"><div class="wrap">
     <div class="stats">
       <div><div class="n">100%</div><div class="l">test coverage, differentially checked against numpy</div></div>
-      <div><div class="n">24/24</div><div class="l">benchmark rows at or above numpy.fft and scipy.fft, on each of three hosts (v0.19)</div></div>
-      <div><div class="n">23/24</div><div class="l">benchmark rows at or above FFTW on Neoverse-N1 (15/24 on Zen 3), v0.19</div></div>
+      <div><div class="n">24/24</div><div class="l">benchmark rows at or above numpy.fft and scipy.fft, on each of three hosts (v0.23.0)</div></div>
+      <div><div class="n">24/24</div><div class="l">benchmark rows within 5% of FFTW or faster on Neoverse-N1 (faster on 22; 12/24 on Zen 3), v0.23.0</div></div>
       <div><div class="n">CGO=0</div><div class="l">no cgo, no FFTW, no native shims</div></div>
     </div>
   </div></section>
@@ -123,7 +123,7 @@ NextFastLen(1009) = 1024</span></pre>
   <section id="eco" style="padding-top:6px"><div class="wrap">
     <div class="band">
       <h2>The cgo-free FFT the Go and Ruby ecosystems lacked.</h2>
-      <p>No cgo, no FFTW. Pure Go on all six 64-bit targets, with AVX2 and AVX-512 kernels on amd64 and NEON kernels on arm64, all bit-identical to the Go code. Ahead of FFTW on 23 of 24 rows on arm64 and on 15 of 24 on AMD; behind it at small sizes on amd64 and on mid-size real transforms on Intel; and at or above numpy and scipy at every size measured on all three hosts — the numbers are on the <a href="https://go-fft.github.io/docs/performance/">performance page</a>.</p>
+      <p>No cgo, no FFTW. Pure Go on all six 64-bit targets, with AVX2 and AVX-512 kernels on amd64 and NEON kernels on arm64, all bit-identical to the Go code. Within 5% of FFTW or faster on 24 of 24 rows on arm64 (faster on 22), on 12 of 24 on AMD and on 11 of 24 on Intel; behind it at small sizes on amd64, and on composites and large real transforms on Intel; and at or above numpy and scipy at every size measured on all three hosts — the numbers are on the <a href="https://go-fft.github.io/docs/performance/">performance page</a>.</p>
       <a class="btn btn-ghost" href="https://github.com/go-fft/fft">{{ partial "icons/github.html" . }}Read the source on GitHub →</a>
     </div>
   </div></section>
