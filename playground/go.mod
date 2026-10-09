@@ -3,13 +3,13 @@ module github.com/go-fft/go-fft.github.io/playground
 go 1.27.1
 
 require (
-	github.com/go-fft/fft v0.21.0
-	github.com/go-opentype/fonts v0.10.0
+	github.com/go-fft/fft v0.23.0
+	github.com/go-opentype/fonts v0.12.0
 	github.com/go-widgets/mvvm v0.13.0
 	github.com/go-widgets/mvvmtk v0.14.1
 	github.com/go-widgets/painter v0.15.0
-	github.com/go-widgets/toolkit v0.327.0
-	github.com/go-widgets/webcanvas v0.2.0
+	github.com/go-widgets/toolkit v0.328.0
+	github.com/go-widgets/webcanvas v0.3.0
 )
 
 require (
