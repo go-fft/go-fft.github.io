@@ -11,10 +11,10 @@
 <body class="lm">
   <header class="nav"><div class="wrap">
     <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-fft logo"> go-fft</a>
-    <nav><a href="#features">Why</a><a href="#check">Accuracy</a><a href="#api">API</a><a href="#repos">Repositories</a><a href="/playground/">Playground</a></nav>
+    <nav><a href="#features">Why</a><a href="#check">Accuracy</a><a href="#api">API</a><a href="#repos">Repositories</a></nav>
     {{ partial "theme-toggle.html" . }}
-    <a class="btn btn-ghost" href="https://github.com/go-fft">{{ partial "icons/github.html" . }}GitHub</a>
   </div></header>
+  {{ partial "fork-ribbon.html" "https://github.com/go-fft/fft" }}
 
   <div class="hero"><div class="wrap">
     <div>
@@ -23,7 +23,6 @@
       <div class="cta">
         <a class="btn btn-primary" href="https://go-fft.github.io/docs/">{{ partial "icons/book.html" . }}Read the documentation →</a>
         <a class="btn btn-ghost" href="/playground/">{{ partial "icons/play.html" . }}Try it in your browser</a>
-        <a class="btn btn-ghost" href="https://github.com/go-fft/fft">{{ partial "icons/github.html" . }}Browse the source</a>
       </div>
       <div class="trust"><span><b>{{ len .Site.Params.families }}</b> API families, numpy and scipy names</span><span><b>6</b> 64-bit targets</span><span><b>CGO=0</b> no FFTW</span></div>
     </div>
