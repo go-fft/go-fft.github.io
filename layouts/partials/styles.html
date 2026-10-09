@@ -115,6 +115,17 @@
   .btn-primary:hover{transform:translateY(-1px)}
   .btn.btn-ghost{border-color:var(--line);color:var(--ink);background:var(--surface-2)}
   .btn-ghost:hover{border-color:var(--ghost-border-hover)}
+  {{/* The fork ribbon sits over the page's top-right corner and scrolls away
+       with the page; the nav bar keeps clear of it until the window is wide
+       enough for the 1120px column to stop short of the corner. */}}
+  .fork-ribbon{position:absolute;top:0;right:0;width:150px;height:150px;overflow:hidden;z-index:30;pointer-events:none}
+  .fork-ribbon a{position:absolute;top:48px;right:-36px;width:200px;padding:7px 0;transform:rotate(45deg);
+    background:var(--grad);color:#fff;text-align:center;font-weight:700;font-size:13px;letter-spacing:.02em;
+    box-shadow:0 4px 12px -4px rgba(0,0,0,.45);outline:1px dashed rgba(255,255,255,.55);outline-offset:-4px;pointer-events:auto}
+  .fork-ribbon a:hover{filter:brightness(1.08)}
+  .fork-ribbon a:focus-visible{outline:2px solid #fff;outline-offset:-4px}
+  @media(max-width:1420px){.nav .wrap{padding-right:112px}}
+  @media(max-width:600px){.fork-ribbon{width:112px;height:112px}.fork-ribbon a{top:34px;right:-52px;font-size:11px;padding:5px 0}.nav .wrap{padding-right:84px}}
   /* hero */
   .hero{padding:74px 0 30px;background:
     radial-gradient(900px 380px at 78% -8%,{{ $wash | safeCSS }},transparent 60%),
