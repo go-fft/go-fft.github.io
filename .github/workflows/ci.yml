@@ -14,6 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      # Hugo resolves the landingkit module (hugo.toml [module]) with the go
+      # command, at the version go.mod pins.
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: false
       - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "0.167.0"
