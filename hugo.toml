@@ -10,6 +10,16 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
 [markup.goldmark.renderer]
   unsafe = true
 
+# The design -- layouts/partials/styles.html, theme-toggle.html,
+# fork-ribbon.html and icons/{github,book}.html -- comes from the shared Hugo
+# module github.com/go-fleettools/landingkit, not from copies here: the copies
+# drifted. Its version is pinned in go.mod (Renovate bumps it), and kit.go
+# keeps `go mod tidy` from deleting that requirement. A file of the same name
+# under layouts/partials/ would silently override the module's.
+[module]
+  [[module.imports]]
+    path = "github.com/go-fleettools/landingkit"
+
 [params]
   description = "go-fft is a pure-Go (CGO=0) FFT library — the numpy.fft / scipy.fft equivalent for Go, with no dependency on the native FFTW3 C library. Pure Go on the six 64-bit targets, with AVX2 and AVX-512 kernels on amd64, bit-identical to the Go code."
 
