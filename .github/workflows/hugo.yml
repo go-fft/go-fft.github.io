@@ -55,7 +55,7 @@ jobs:
       # it goes stale silently (go-tex's playground shipped a stale UI that way).
       - uses: actions/setup-go@v7
         with:
-          go-version: "1.27.1"
+          go-version: "1.27.2"
           cache-dependency-path: playground/go.sum
 
       - name: Build the playground wasm
