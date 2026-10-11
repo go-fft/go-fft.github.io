@@ -81,3 +81,5 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   chipBgDark = "rgba(52,211,153,.14)"
   chipBorderDark = "rgba(52,211,153,.32)"
   chipFgDark = "#8fe7c7"
+  statsEnd = "#cef4e7"
+  bandText = "#dff8ef"
