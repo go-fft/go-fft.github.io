@@ -13,7 +13,7 @@ jobs:
     name: the site builds
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       # Hugo resolves the landingkit module (hugo.toml [module]) with the go
       # command, at the version go.mod pins.
       - uses: actions/setup-go@v7
