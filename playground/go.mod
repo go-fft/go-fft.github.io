@@ -3,8 +3,8 @@ module github.com/go-fft/go-fft.github.io/playground
 go 1.27.2
 
 require (
-	github.com/go-fft/fft v0.27.1
-	github.com/go-opentype/fonts v0.12.0
+	github.com/go-fft/fft v0.27.3
+	github.com/go-opentype/fonts v0.14.0
 	github.com/go-widgets/mvvm v0.15.0
 	github.com/go-widgets/mvvmtk v0.15.0
 	github.com/go-widgets/painter v0.16.0
@@ -25,7 +25,7 @@ require (
 	github.com/go-images/jpeg v0.3.0 // indirect
 	github.com/go-images/jpeg2000 v0.13.3 // indirect
 	github.com/go-images/png v0.2.0 // indirect
-	github.com/go-opentype/opentype v0.15.0 // indirect
+	github.com/go-opentype/opentype v0.16.0 // indirect
 	github.com/go-opentype/shape v0.7.0 // indirect
 	github.com/go-richdoc/richdoc v0.6.0 // indirect
 	github.com/go-typeset/bidi v0.3.1 // indirect
