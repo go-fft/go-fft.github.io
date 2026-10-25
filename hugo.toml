@@ -54,6 +54,9 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   name = "numpy's arguments"
   what = "`n`, `norm` and `axes` through the `...With(Options)` variants, whose zero value is numpy's defaults; `FFTShift` and `NextFastLen`."
 [[params.families]]
+  name = "Opt-in FMA"
+  what = "`Options{FMA: true}` and `NewPlanWith`: fused multiply-adds on amd64 with FMA3, as accurate as the default and up to 1.22× faster (complex 1,024 on Cascade Lake, 0.94× FFTW's time); the default stays bit-identical to the Go code."
+[[params.families]]
   name = "DCT and DST"
   what = "Types I–IV, forward, inverse and N-D, as `scipy.fft.dct` and `dst` define them, with reusable plans."
 [[params.families]]
