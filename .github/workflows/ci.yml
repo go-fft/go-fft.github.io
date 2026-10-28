@@ -22,7 +22,7 @@ jobs:
           cache: false
       - uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: "0.168.0"
+          hugo-version: "0.169.0"
           extended: true
       - run: hugo --minify
       # A page that builds and says nothing is a page nobody notices is empty.
