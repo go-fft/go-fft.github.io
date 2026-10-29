@@ -102,7 +102,7 @@ jobs:
         run: GOOS=js GOARCH=wasm go build -trimpath -ldflags='-s -w' -o ../static/playground/playground.wasm ./cmd/playground-wasm
       - uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: "0.168.0"
+          hugo-version: "0.169.0"
           extended: true
       - run: hugo --minify --destination "$RUNNER_TEMP/site"
       - name: drive the page in Chrome, light and dark
