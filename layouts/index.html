@@ -100,8 +100,8 @@ NextFastLen(1009) = 1024</span></pre>
   <section id="perf" style="padding-top:10px"><div class="wrap">
     <div class="stats">
       <div><div class="n">100%</div><div class="l">test coverage, differentially checked against numpy</div></div>
-      <div><div class="n">24/24</div><div class="l">benchmark rows at or above numpy.fft and scipy.fft, on each of three hosts (v0.27.0; Zen 3 re-measured at v0.28.6)</div></div>
-      <div><div class="n">24/24</div><div class="l">benchmark rows faster than FFTW on Neoverse-N1 (within 5% or faster: 18/24 on Zen 3 at v0.28.6, 15/24 on Cascade Lake, where every 2-D row is faster), v0.27.0</div></div>
+      <div><div class="n">24/24</div><div class="l">benchmark rows at or above numpy.fft and scipy.fft, on each of three hosts (v0.27.0; Zen 3 and Neoverse-N1 re-measured at v0.28.6/v0.28.7)</div></div>
+      <div><div class="n">24/24</div><div class="l">benchmark rows faster than FFTW on Neoverse-N1, re-measured 2026-11-01 (within 5% or faster: 18/24 on Zen 3 at v0.28.6, 15/24 on Cascade Lake, where every 2-D row is faster), v0.27.0</div></div>
       <div><div class="n">CGO=0</div><div class="l">no cgo, no FFTW, no native shims</div></div>
     </div>
   </div></section>
@@ -122,7 +122,7 @@ NextFastLen(1009) = 1024</span></pre>
   <section id="eco" style="padding-top:6px"><div class="wrap">
     <div class="band">
       <h2>The cgo-free FFT the Go and Ruby ecosystems lacked.</h2>
-      <p>No cgo, no FFTW. Pure Go on all six 64-bit targets, with AVX2 and AVX-512 kernels on amd64 and NEON kernels on arm64, all bit-identical to the Go code. Faster than FFTW on 24 of 24 rows on arm64; within 5% of it or faster on 18 of 24 on AMD (faster on 16, re-measured at v0.28.6) and on 15 of 24 on Intel (faster on 14, every 2-D row among them); behind it on complex 256 and 1,024 on amd64, and on Intel on composites and at 65,536 points; and at or above numpy and scipy at every size measured on all three hosts. Since v0.28.0, the opt-in <code>Options{FMA: true}</code> trades bit identity for speed on amd64: on Cascade Lake complex 1,024 runs at 0.94× FFTW's time (1.19× by default), and 18 of 24 rows are within 5% of FFTW (also 18 of 24 on Zen 3 at v0.28.6, where complex 1,024 stays at 1.13×) — the numbers are on the <a href="https://go-fft.github.io/docs/performance/">performance page</a>.</p>
+      <p>No cgo, no FFTW. Pure Go on all six 64-bit targets, with AVX2 and AVX-512 kernels on amd64 and NEON kernels on arm64, all bit-identical to the Go code. Faster than FFTW on 24 of 24 rows on arm64; within 5% of it or faster on 18 of 24 on AMD (faster on 16, re-measured at v0.28.6) and on 15 of 24 on Intel (faster on 14, every 2-D row among them); behind it on complex 256 and 1,024 on amd64, and on Intel on composites and at 65,536 points; and at or above numpy and scipy at every size measured on all three hosts. Since v0.28.0, the opt-in <code>Options{FMA: true}</code> trades bit identity for speed on amd64: on Cascade Lake complex 1,024 runs at 0.94× FFTW's time (1.19× by default), and 18 of 24 rows are within 5% of FFTW (18 to 20 of 24 on Zen 3 over two passes at v0.28.6, where complex 1,024 stays at 1.13×) — the numbers are on the <a href="https://go-fft.github.io/docs/performance/">performance page</a>.</p>
       <a class="btn btn-ghost" href="https://github.com/go-fft/fft">{{ partial "icons/github.html" . }}Read the source on GitHub →</a>
     </div>
   </div></section>
