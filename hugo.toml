@@ -55,7 +55,7 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   what = "`n`, `norm` and `axes` through the `...With(Options)` variants, whose zero value is numpy's defaults; `FFTShift` and `NextFastLen`."
 [[params.families]]
   name = "Opt-in FMA"
-  what = "`Options{FMA: true}` and `NewPlanWith`: fused multiply-adds on amd64 with FMA3, as accurate as the default and up to 1.22× faster (complex 1,024 on Cascade Lake, 1.03× FFTW's time against 1.24× by default, 2026-11-07); the default stays bit-identical to the Go code."
+  what = "`Options{FMA: true}` and `NewPlanWith`: fused multiply-adds on amd64 with FMA3, as accurate as the default and up to 1.22× faster (complex 1,024 on Cascade Lake, 1.03× FFTW's time against 1.24× by default, 2026-11-07); the default stays bit-identical to the Go code. The contract is an error bound against an extended-precision oracle, at most `c·ε·log2(n)` with `c` from 0.5 to 2; `Options{Exact: true}` (next release) names the reference arithmetic, for callers who need the bits reproducible whatever the default becomes."
 [[params.families]]
   name = "DCT and DST"
   what = "Types I–IV, forward, inverse and N-D, as `scipy.fft.dct` and `dst` define them, with reusable plans."
