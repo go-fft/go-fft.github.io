@@ -60,6 +60,9 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   name = "DCT and DST"
   what = "Types I–IV, forward, inverse and N-D, as `scipy.fft.dct` and `dst` define them, with reusable plans."
 [[params.families]]
+  name = "MDCT and IMDCT"
+  what = "The lapped transform of AAC, Vorbis and Opus: `NewMDCTPlan(n)` maps `n` samples (even) to `n/2` coefficients and back, float64 and float32, allocation-free, with `SineWindow` and `KBDWindow`; checked against the O(n²) definition in double-double."
+[[params.families]]
   name = "Single precision"
   what = "Every function above with `32` appended: `complex64` in, `complex64` out, as scipy.fft and NumPy 2 keep it, on its own AVX2 and NEON kernels."
 [[params.families]]
