@@ -46,7 +46,7 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   what = "`FFT`, `IFFT` and `Plan` for any length: Stockham for lengths whose prime factors are at most 13, Rader or Bluestein for the rest."
 [[params.families]]
   name = "Real 1-D and Hermitian"
-  what = "`RFFT`, `IRFFT`, `HFFT`, `IHFFT` and `RealPlan`: the N/2+1 non-redundant bins, as `numpy.fft.rfft` returns them. Since v0.31.0 `FFTReal` (the full spectrum) runs on the real transform for even lengths, 2,320 to 1,587 ns at 1,024 points on a Zen 4 (go-fft#147), and `FFTRealWith` takes `n`, `norm`, `FMA` and `Exact`. Odd lengths need no separate algorithm: `RFFT` is 0.65 to 0.90 times FFTW r2c's time at 1,009, 1,125, 2,187 and 3,125 points (go-fft#116)."
+  what = "`RFFT`, `IRFFT`, `HFFT`, `IHFFT` and `RealPlan`: the N/2+1 non-redundant bins, as `numpy.fft.rfft` returns them. Since v0.31.0 `FFTReal` (the full spectrum) runs on the real transform for even lengths, 2,320 to 1,587 ns at 1,024 points on a Zen 4 (go-fft#147), and `FFTRealWith` takes `n`, `norm`, `FMA` and `Exact`. Since v0.31.1 `RealPlan.FFTReal(dst, src)` is allocation-free and its conjugate mirror is a SIMD kernel: on a Zen 4, against FFTW's r2c plus mirror, 146 ns at 256 points (0.90 times FFTW's time), 608 at 1,024 (0.91) and 3,605 at 4,096 (1.11) (go-fft#153). Odd lengths need no separate algorithm: `RFFT` is 0.65 to 0.90 times FFTW r2c's time at 1,009, 1,125, 2,187 and 3,125 points (go-fft#116)."
 [[params.families]]
   name = "N-D and 2-D"
   what = "`FFTN`, `FFT2`, `RFFTN`, `RFFT2` and allocation-free `PlanN`/`RealPlan2`, over a row-major shape, spread across cores when large."
