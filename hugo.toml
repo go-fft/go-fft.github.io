@@ -21,13 +21,13 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
     path = "github.com/go-fleettools/landingkit"
 
 [params]
-  description = "go-fft is a pure-Go (CGO=0) FFT library — the numpy.fft / scipy.fft equivalent for Go, with no dependency on the native FFTW3 C library. Pure Go on the six 64-bit targets, with AVX2 and AVX-512 kernels on amd64, bit-identical to the Go code."
+  description = "go-fft is a pure-Go (CGO=0) FFT library — the numpy.fft / scipy.fft equivalent for Go, with no dependency on the native FFTW3 C library. Pure Go on the six 64-bit targets, with AVX2 and AVX-512 kernels on amd64, bit-identical to the Go code of their arithmetic (fused on amd64 with FMA3 by default since v0.32.0)."
 
 [[params.repos]]
   name  = "fft"
   kind  = "library"
   href  = "https://github.com/go-fft/fft"
-  blurb = "The library. Complex &amp; real transforms of any length (<code>FFT</code>/<code>IFFT</code>/<code>RFFT</code>/<code>IRFFT</code>), N-D and 2-D (<code>FFTN</code>/<code>FFT2</code>), allocation-free plans (<code>NewPlan</code>, <code>NewPlanN</code>, <code>NewRealPlan2</code>), numpy's <code>n</code>/<code>norm</code>/<code>axes</code>, <code>HFFT</code>, <code>FFTShift</code>, the DCT and DST of types I–IV, single precision for all of it (<code>FFT32</code>, <code>FFTN32</code>, <code>DCT32</code>…, with its own SIMD kernels), frequency-bin helpers, windows, and spectral helpers (<code>PSD</code>/<code>Spectrogram</code>). A mixed-radix Stockham engine, Rader and Bluestein for the other lengths, <strong>AVX2 and AVX-512 pass kernels</strong> on amd64 and <strong>NEON</strong> on arm64, chosen at run time and bit-identical to the Go code."
+  blurb = "The library. Complex &amp; real transforms of any length (<code>FFT</code>/<code>IFFT</code>/<code>RFFT</code>/<code>IRFFT</code>), N-D and 2-D (<code>FFTN</code>/<code>FFT2</code>), allocation-free plans (<code>NewPlan</code>, <code>NewPlanN</code>, <code>NewRealPlan2</code>), numpy's <code>n</code>/<code>norm</code>/<code>axes</code>, <code>HFFT</code>, <code>FFTShift</code>, the DCT and DST of types I–IV, single precision for all of it (<code>FFT32</code>, <code>FFTN32</code>, <code>DCT32</code>…, with its own SIMD kernels), frequency-bin helpers, windows, and spectral helpers (<code>PSD</code>/<code>Spectrogram</code>). A mixed-radix Stockham engine, Rader and Bluestein for the other lengths, <strong>AVX2 and AVX-512 pass kernels</strong> on amd64 and <strong>NEON</strong> on arm64, chosen at run time and bit-identical to the Go code of their arithmetic (fused on amd64 with FMA3 by default since v0.32.0)."
 [[params.repos]]
   name  = "docs"
   kind  = "site"
@@ -54,8 +54,8 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   name = "numpy's arguments"
   what = "`n`, `norm` and `axes` through the `...With(Options)` variants, whose zero value is numpy's defaults; `FFTShift` and `NextFastLen`."
 [[params.families]]
-  name = "Opt-in FMA"
-  what = "`Options{FMA: true}` and `NewPlanWith`: fused multiply-adds on amd64 with FMA3, as accurate as the default and up to 1.22× faster (complex 1,024 on Cascade Lake, 1.03× FFTW's time against 1.24× by default, 2026-11-07); the default stays bit-identical to the Go code. The contract is an error bound against an extended-precision oracle, at most `c·ε·log2(n)` with `c` from 0.5 to 2.25 (measured, not proved); `Options{Exact: true}` (v0.29.0) names the reference arithmetic as compiled by gc (v0.28.16's bits on the same machine), for callers who need the bits reproducible on one machine whatever the default becomes."
+  name = "Fused multiply-add by default"
+  what = "Since v0.32.0 the default arithmetic fuses multiply-adds on amd64 with FMA3, as accurate as the unfused one: on a Zen 4 every float64 row is 0.925 to 1.012 of the unfused time (median about 0.985, complex 1,024 runs 32·32), on a Cascade Lake guest the 1-D complex rows gain up to 0.80 (go-fft#155). `Options{NoFMA: true}` turns the fusing off, `Options{FMA: true}` asks for it explicitly, `Options{Exact: true}` is the reference arithmetic; `FMA` excludes `NoFMA` and `Exact` (both set panics). The contract is an error bound against an extended-precision oracle, at most `c·ε·log2(n)` with `c` from 0.5 to 2.25 (measured, not proved); `Options{Exact: true}` (v0.29.0) names the reference arithmetic as compiled by gc (v0.28.16's bits on the same machine), for callers who need the bits reproducible on one machine whatever the default becomes."
 [[params.families]]
   name = "DCT and DST"
   what = "Types I–IV, forward, inverse and N-D, as `scipy.fft.dct` and `dst` define them, with reusable plans."
