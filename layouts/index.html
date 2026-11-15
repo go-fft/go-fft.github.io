@@ -7,6 +7,7 @@
 <meta name="description" content="{{ .Site.Params.description }}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 {{ partial "styles.html" . }}
+{{ partial "btn-try-style.html" . }}
 </head>
 <body class="lm">
   <header class="nav"><div class="wrap">
@@ -19,11 +20,9 @@
   <div class="hero"><div class="wrap">
     <div>
       <h1 class="head">The discrete Fourier transform in pure Go.<br><span class="accent">numpy.fft semantics, no FFTW.</span></h1>
-      <p class="sub"><b>go-fft</b> computes the discrete Fourier transform of complex and real signals of <b>any length</b> — an iterative mixed-radix Stockham engine for lengths with small prime factors, Rader and Bluestein's chirp-z for the rest — in <b>pure Go, with cgo disabled</b>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="https://go-fft.github.io/docs/">{{ partial "icons/book.html" . }}Read the documentation →</a>
-        <a class="btn btn-ghost" href="/playground/">{{ partial "icons/play.html" . }}Try it in your browser</a>
-      </div>
+      <p class="sub"><b>go-fft</b> computes the discrete Fourier transform of complex and real signals of <b>any length</b> — an iterative mixed-radix Stockham engine for lengths with small prime factors, Rader and Bluestein's chirp-z for the rest — in <b>{{ if partial "mantra-on.html" . }}Go{{ else }}pure Go{{ end }}, with cgo disabled</b>. It follows the <code>numpy.fft</code> / <code>scipy.fft</code> conventions: forward and inverse complex and real transforms, multi-dimensional and 2-D transforms, frequency-bin helpers, window functions and spectral helpers (PSD, spectrogram).</p>
+      {{/* [[params.cta]] in hugo.toml: the kit renders the row */}}
+      {{ partial "cta.html" . }}
       <div class="trust"><span><b>{{ len .Site.Params.families }}</b> API families, numpy and scipy names</span><span><b>6</b> 64-bit targets</span><span><b>CGO=0</b> no FFTW</span></div>
     </div>
     {{/* Lines taken verbatim from the API section of go-fft/fft's README. */}}
@@ -78,12 +77,12 @@ NextFastLen(1009) = 1024</span></pre>
     <h2>The workhorse of signal processing, <i>without</i> FFTW.</h2>
     <p class="lead">The fast Fourier transform is the workhorse of signal processing, and in most languages it means binding the native <b>FFTW3</b> C library. go-fft brings the <code>numpy.fft</code> / <code>scipy.fft</code> vocabulary to Go with <b>no cgo and no FFTW</b>: a single portable module that cross-compiles to a static binary on every target, accelerated by go-asmgen-generated SIMD where the Go assembler allows it.</p>
     <div class="grid" id="quality">
-      <div class="card"><div class="ico">🐹</div><h3>Pure Go</h3><p><code>CGO_ENABLED=0</code> across the org. No cgo, no FFTW, no native shims.</p></div>
+      {{ if not (partial "mantra-on.html" .) }}<div class="card"><div class="ico">🐹</div><h3>Pure Go</h3><p><code>CGO_ENABLED=0</code> across the org. No cgo, no FFTW, no native shims.</p></div>{{ end }}
       <div class="card"><div class="ico">✅</div><h3>100% test coverage</h3><p>Gated in CI, differentially checked against <code>numpy.fft</code>.</p></div>
       <div class="card"><div class="ico">🔢</div><h3>numpy.fft semantics</h3><p>The same normalization, bin layout and frequency conventions you already know.</p></div>
       <div class="card"><div class="ico">⚡</div><h3>AVX2, AVX-512 &amp; NEON, bit-identical</h3><p>On amd64 the transform's passes run as go-asmgen AVX2 kernels, and AVX-512 for large powers of two; on arm64 as NEON kernels that reproduce the compiler's own fused multiply-adds — each tested <i>bit-identical</i> to the Go code, because a faster transform that answers differently is not the same transform. The same Go code runs on all six 64-bit targets.</p></div>
       <div class="card"><div class="ico">💎</div><h3>The cgo-free FFT that was missing</h3><p>Ruby has no cgo-free FFT (every option wraps FFTW3) and <code>gonum/dsp/fourier</code>'s optimized assembly is amd64-only. go-fft runs on all six 64-bit Go targets, in pure Go.</p></div>
-      <div class="card"><div class="ico">⚖️</div><h3>BSD-3-Clause</h3><p>On every source file.</p></div>
+      {{ if not (partial "mantra-on.html" .) }}<div class="card"><div class="ico">⚖️</div><h3>BSD-3-Clause</h3><p>On every source file.</p></div>{{ end }}
     </div>
   </div></section>
 
@@ -127,6 +126,6 @@ NextFastLen(1009) = 1024</span></pre>
     </div>
   </div></section>
 
-  <footer><div class="wrap"><span>go-fft · <a href="https://github.com/go-fft">go-fft on GitHub</a> · BSD-3-Clause</span><span>Pure Go · CGO_ENABLED=0 · no FFTW</span></div></footer>
+  <footer><div class="wrap"><span>go-fft · <a href="https://github.com/go-fft">go-fft on GitHub</a>{{ if not (partial "mantra-on.html" .) }} · BSD-3-Clause{{ end }}</span><span>{{ if not (partial "mantra-on.html" .) }}Pure Go · CGO_ENABLED=0 · {{ end }}no FFTW</span></div></footer>
 </body>
 </html>
