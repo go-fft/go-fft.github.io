@@ -1,0 +1,35 @@
+name: landingkit-check
+
+# The landing kit's own rules (a hand-written hero row, a playground link that is
+# not btn-try, a fact said twice beside the mantra strip, a fork ribbon with no
+# Digital Commons band), read from the BUILT site.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: the page follows the kit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: false
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.169.0"
+          extended: true
+      - run: hugo --minify --destination ./public
+      - name: Check
+        env:
+          GOWORK: "off"
+        run: go run github.com/go-fleettools/landingkit/cmd/landingkit check public

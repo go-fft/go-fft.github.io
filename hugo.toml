@@ -89,3 +89,13 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   chipFgDark = "#8fe7c7"
   statsEnd = "#cef4e7"
   bandText = "#dff8ef"
+
+# The hero's buttons, rendered by landingkit's cta.html in the kit's order.
+[[params.cta]]
+  kind  = "docs"
+  href  = "https://go-fft.github.io/docs/"
+  label = "Read the documentation →"
+[[params.cta]]
+  kind  = "try"
+  href  = "/playground/"
+  label = "Try it in your browser"
